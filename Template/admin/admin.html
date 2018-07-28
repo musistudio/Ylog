@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ylog管理系统</title>
+	<link rel="stylesheet" href="{{static_url('css/font-awesome.min.css')}}">
+	<script src="{{static_url('js/jquery.js')}}"></script>
+	<link rel="stylesheet" href="{{static_url('css/admin.css')}}">
+	<link rel="apple-touch-icon-precomposed" href="{{static_url('image/icon.jpg')}}">
+	<link rel="shortcut icon" href="{{static_url('image/icon.jpg')}}">
+</head>
+<body>
+	<div class="container">
+		<nav class="top" id="top">
+			<span class="logo"><img src="{{static_url('image/icon.jpg')}}" height="50px;"></span>
+			<span class="logo">Ylog Admin</span>
+			<ul>
+				<li><a href="#" class="nav active">文章</a></li>
+				<li><a href="#" class="nav">wiki</a></li>
+				<li><a href="#" class="nav">设置</a></li>
+			</ul>
+		</nav>
+		<aside class="left-nav">
+			<div class="l-content">
+				<ul id="page" style="display: ;">
+					<li class="active"><a href="#">文章管理</a></li>
+					<li><a href="#">写文章</a></li>
+					<li><a href="#">标签管理</a></li>
+				</ul>
+				<ul id="wiki" style="display: none;">
+					<li><a href="#">wiki manager</a></li>
+					<li><a href="#">new wiki</a></li>
+				</ul>
+				<ul id="setting" style="display: none;">
+					<li><a href="#">站点设置</a></li>
+					<li><a href="#">SEO设置</a></li>
+				</ul>
+			</div>
+		</aside>
+		<div class="main">
+			<iframe src="artical.html" frameborder="0" id="iframe"></iframe>
+		</div>
+	</div>
+
+	<script>
+		var oIframe = document.getElementById('iframe');
+		var oNav = document.getElementsByClassName("nav");
+		for(var i = 0; i < oNav.length; i++){
+			(function(i){
+				oNav[i].addEventListener("click", function(){
+					if(i == 0){
+						document.getElementById("wiki").style.display = 'none';
+						document.getElementById("setting").style.display = 'none';
+						document.getElementById("page").style.display = '';
+					}else if(i == 1){
+						document.getElementById("page").style.display = 'none';
+						document.getElementById("setting").style.display = 'none';
+						document.getElementById("wiki").style.display = '';
+					}else if(i == 2){
+						document.getElementById("wiki").style.display = 'none';
+						document.getElementById("page").style.display = 'none';
+						document.getElementById("setting").style.display = '';
+					}
+					for(var j = 0; j < oNav.length; j++){
+						(function(j){
+							$(oNav[j]).removeClass('active');
+						})(j)
+					}
+					$(oNav[i]).addClass('active');
+				}, false)
+			})(i)
+		}
+	</script>
+	<script>
+		var oLNav = document.getElementsByClassName("l-content")[0].getElementsByTagName("li");
+		for(var i = 0; i < oLNav.length; i++){
+			(function(i){
+				oLNav[i].addEventListener("click", function(){
+					for(var j = 0; j < oLNav.length; j++){
+						(function(j){
+							$(oLNav[j]).removeClass('active');
+						})(j)
+					}
+					if(i == 0){
+						oIframe.src = 'artical.html';
+					}else if(i == 1){
+						oIframe.src = 'writer.html';
+					}else if(i == 2){
+						oIframe.src = 'tags.html';
+					}
+					$(oLNav[i]).addClass('active');
+				}, false);
+			})(i)
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+{% autoescape None %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>慕司的个人博客</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}"/>
+	<script src="{{static_url('js/jquery.js')}}"></script>
+	<script src="{{static_url('js/bootstrap.min.js')}}"></script>
+	<link rel="stylesheet" href="{{static_url('css/style.css')}}">
+	<script src="{{static_url('js/d3.min.js')}}"></script>
+	<script src="{{static_url('js/d3.layout.cloud.js')}}"></script>
+</head>
+<body>
+<script>
+
+	var _id = {{ id }};
+	var _isLast = {{ isLast }};
+</script>
+	<div class="nav" id="nav">
+		<div class="n-main">
+			<div class="n-tittle">
+				<a href="http://www.musiiot.top">慕司</a>
+			</div>
+			<div class="n-nav">
+				<button type="button" class="btn btn-default" aria-label="Justify" style="background-color: #000;border-color: #000;" data-toggle="collapse" data-parent="#accordion" href="#m-nav">
+					<span class="glyphicon glyphicon-align-justify" aria-hidden="true" style="color: #fff;"></span>
+				</button>
+			</div>
+			<div id="m-nav" class="panel-collapse collapse">
+				<ul>
+					<li>
+						<a href="/archive">Archive</a>
+					</li>
+					<li>
+						<a href="/wiki">Wiki</a>
+					</li>
+					<li>
+						<a href="https://github.com/musistudio">Github</a>
+					</li>
+					<li>
+						<a href="/subscribe">Subscribe</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="main">
+		<div class="m-header">
+			慕司的个人博客
+		</div>
+		<div class="sign">悟已往之不谏，知来者之可追。实迷途其未远，觉今是而昨非。</div>
+		<div class="m-container" id="m-container">
+			<div class="m-left">
+				<div class="artical">
+
+					{% for artical in articals %}
+					<div class="artical-main">
+					<div class="a-tittle">
+						<div class="date">
+							{{ artical['public_time'] }}
+						</div>
+						<a href="#">{{artical['tittle']}}</a>
+					</div>
+					<div class="a-content">
+						<div class="thumbnail" style="display: {{ artical['thumbnail'] }}">
+							<img src="{{ artical['thumbnail'] }}" >
+						</div>
+						<p>{{artical['content']}}</p>
+					</div>
+					<a data-pjax="" href="#" class="btn more">Read More</a>
+						</div>
+					{% end %}
+				</div>
+
+				<div class="page">
+					<center>
+						<ul>
+							<li><a href="#" id="prev">Prev</a></li>
+							<li><a href="/">Home</a></li>
+							<li><a href="#" id="next">Next</a></li>
+						</ul>
+					</center>
+				</div>
+			</div>
+			<div class="m-right">
+				<div class="side">
+					<div class="tags">
+						<h4>微信公众号</h4>
+						<img src="{{static_url('image/qrcode.jpg')}}">
+					</div>
+					<div class="tags">
+						<h4>标签云</h4>
+						<div class="tagcloud" id="tagcloud"></div>
+					</div>
+					<div class="tags">
+						<h4>links</h4>
+						<div class="links">
+							<ul>
+								<li><a href="#">浙江省精品课程刷课平台</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div style="clear: both"></div>
+		</div>
+	</div>
+
+	<div class="footer">
+		Copyright &copy; 2018 All Rights Reserved Powered by 慕司
+	</div>
+
+	<script>
+		if(_id == 1){
+		    $("#prev").attr("href", "javascript:void(0);");
+		    $("#prev").css("color", "#aaa");
+		}else{
+		    $("#prev").attr("href", "/"+(_id-1)+".html");
+		}
+		if(_isLast){
+			$("#next").attr("href", "javascript:void(0);");
+			$("#next").css("color", "#aaa");
+		}else{
+			$("#next").attr("href", "/"+(_id+1)+".html");
+		}
+	</script>
+
+	<script>
+
+		var m_top = $("#m-container").offset().top;
+		var isHidden = false;
+		$(window).scroll(function (){
+			var NowTop = $(window).scrollTop();
+			if(NowTop >= m_top){
+				$("#nav").css({
+					opacity: '0.2'
+				});
+				isHidden = true;
+			}else{
+				$("#nav").css({
+					opacity: '1'
+				});
+				isHidden = false;
+			}
+		});
+		$("#nav").hover(
+		  function () {
+		    $("#nav").css({opacity: '1'})
+		  },
+		  function () {
+		  	if(isHidden){
+		  		$("#nav").css({opacity: '0.2'})
+		  	}
+		  }
+		);
+	</script>
+	<script>
+		if(window.screen.width > 980){
+					var words = ["Python", "Javascript", "Linux", "PHP", "Git", "reactjs", "Node.js", "math"];
+					var wordSize = {"Python":45, "Javascript":30, "Linux":15, "PHP":20, "Git":25, "reactjs":30, "Node.js":35, "math":40};
+					var fill = d3.scale.category20();
+					var d3_size = window.getComputedStyle(document.getElementById("tagcloud")).width.replace("px", "");
+			        var layout = d3.layout.cloud()
+			            .size([d3_size, 300])
+			            .words(words.map(function(d) {
+			                return {text: d, size: wordSize[d]};
+			            }))
+			            .padding(3)
+			            .rotate(function() { return ~~(Math.random() * 2) * 90; })
+			            .font("Impact")
+			            .fontSize(function(d) { return d.size; })
+			            .on("end", draw);
+
+			        layout.start();
+
+			function draw(words) {
+			  d3.select("#tagcloud").append("svg")
+			      .attr("width", layout.size()[0])
+			      .attr("height", layout.size()[1])
+			    .append("g")
+			      .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+			    .selectAll("text")
+			      .data(words)
+			    .enter().append("text")
+			      .style("font-size", function(d) { return d.size + "px"; })
+			      .style("font-family", "Impact")
+			      .style("fill", function(d, i) { return fill(i); })
+			      .attr("text-anchor", "middle")
+			      .attr("transform", function(d) {
+			        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+			      })
+			      .text(function(d) { return d.text; });
+			}
+		}
+
+
+	</script>
+
+</body>
+</html>

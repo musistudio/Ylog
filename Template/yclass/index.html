@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ylog管理系统登录</title>
+	<style>
+	    *{
+	    	margin: 0;
+	    	padding: 0;
+	    }
+		body{
+			background-color: #F1F1F1;
+		}
+		.main .icon img{
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+		}
+		.main .icon span{
+			font-size: 50px;
+			font-weight: bolder;
+		}
+		.main .icon img:hover{
+			animation:rotate 1s linear;
+			transform:rotate(360deg);
+		}
+		.main .form{
+			width: 380px;
+			height: 200px;
+			margin-top: 10px;
+			margin-left: 10px;
+			background-color: #fff;
+			text-align: center;
+		}
+		.main .form input{
+			width: 90%;
+			height: 40px;
+			border: 1px solid #ccc;
+			padding-left: 5px;
+			font-size: 16px;
+		}
+		.main .form input:nth-child(2){
+			margin-top: 5px;
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+			margin-bottom: -1px;
+		}
+		.main .form input:nth-child(4){
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
+		.main .form button{
+			width: 90%;
+			height: 50px;
+			font-size: 18px;
+			border: 0;
+			margin-top: 10px;
+			background-color: #3399CC;
+			color: #fff;
+			border-radius: 10px;
+		}
+		.main .findpwd{
+			width: 100%;
+			text-align: right;
+			margin-top: 10px;
+		}
+		.main .findpwd a{
+			text-decoration: none;
+			color: #555;
+		}
+		@keyframes rotate{
+		0%  {transform:rotate(0deg);}
+		50%  {transform:rotate(180deg);}
+		100% {transform:rotate(360deg);}
+	    }
+	</style>
+</head>
+<body>
+	<div class="main">
+		<div class="icon">
+			<img src="{{static_url('image/icon.jpg')}}" alt=""> <span>&</span> <img src="{{static_url('image/class-logo.png')}}" alt="">
+		</div>
+		<div class="form">
+			<h2>输入账号进行刷课</h4>
+			<input type="text" placeholder="请输入学号"><br>
+			<input type="password" placeholder="请输入密码"><br>
+			<button>登录</button>
+		</div>
+		<div class="findpwd">
+			<a href="#">找回密码 →</a>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>慕司的个人博客</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}"/>
+	<script src="{{static_url('js/jquery.js')}}"></script>
+	<script src="{{static_url('js/bootstrap.min.js')}}"></script>
+	<link rel="stylesheet" href="{{static_url('css/style.css')}}">
+	<script src="{{static_url('js/d3.min.js')}}"></script>
+	<script src="{{static_url('js/d3.layout.cloud.js')}}"></script>
+</head>
+<body>
+	<div class="nav" id="nav">
+		<div class="n-main">
+			<div class="n-tittle">
+				<a href="http://www.musiiot.top">慕司</a>
+			</div>
+			<div class="n-nav">
+				<ul>
+					<li>
+						<a href="/archive" id="test">Archive</a>
+					</li>
+					<li>
+						<a href="/wiki">Wiki</a>
+					</li>
+					<li>
+						<a href="https://github.com/musistudio">Github</a>
+					</li>
+					<li>
+						<a href="/subscribe">Subscribe</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+				</ul>
+				<button type="button" class="btn btn-default" aria-label="Justify" style="background-color: #000;border-color: #000;" data-toggle="collapse" data-parent="#accordion" href="#m-nav">
+					<span class="glyphicon glyphicon-align-justify" aria-hidden="true" style="color: #fff;"></span>
+				</button>
+			</div>
+			<div id="m-nav" class="panel-collapse collapse">
+				<ul>
+					<li>
+						<a href="/archive">Archive</a>
+					</li>
+					<li>
+						<a href="/wiki">Wiki</a>
+					</li>
+					<li>
+						<a href="https://github.com/musistudio">Github</a>
+					</li>
+					<li>
+						<a href="/subscribe">Subscribe</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="main">
+		<div class="m-header">
+			慕司的个人博客
+		</div>
+		<div class="sign">悟已往之不谏，知来者之可追。实迷途其未远，觉今是而昨非。</div>
+		<div class="m-container" id="m-container">
+			<div class="m-left">
+				<div class="artical">
+					<div class="a-tittle">
+						<div class="date">
+							Jun 20 2018
+						</div>
+						<a href="#">博客标题测试</a>
+					</div>
+					<div class="a-content">
+						<div class="thumbnail">
+							<img src="{{static_url('image/qrcode.jpg')}}">
+						</div>
+						<p>要让叮当能够监控一些关键事件并触发响应操作，除了编写插件之外，还有一个简单省事的方法：利用 IFTTT 。下面我举几个简单的示例，其他的应用场景你们可以尽情发挥想象力。</p>
+						<p>IFTTT 是一个被称为 “网络自动化神器” 的创新型互联网服务，它非常实用而且完全免费。它的全称是 If this then that，意思是“如果这样，那么就那样”。简单地讲，IFTTT 的作用就是，如果「这个」网络服务满足条件，那么就自动触发「那个」网络服务去执行一个动作。而条件和动作都是可以由用户自己去根据自身需求设置的。IFTTT 能将前后这两个不同的网络服务神奇般地连通来实现各种各样的功能，并且为你不间断地工作。</p>
+						<p>在阅读下面的文章前，建议先去注册一个 IFTTT 账号，为了方便关联叮当，建议使用叮当的收件邮箱注册。</p>
+					</div>
+					<a data-pjax="" href="#" class="btn more">Read More</a>
+
+					<div class="a-tittle">
+						<div class="date">
+							Jun 20 2018
+						</div>
+						<a href="#">博客标题测试</a>
+					</div>
+					<div class="a-content">
+						<div class="thumbnail">
+							<img src="{{static_url('image/qrcode.jpg')}}">
+						</div>
+						<p>要让叮当能够监控一些关键事件并触发响应操作，除了编写插件之外，还有一个简单省事的方法：利用 IFTTT 。下面我举几个简单的示例，其他的应用场景你们可以尽情发挥想象力。</p>
+						<p>IFTTT 是一个被称为 “网络自动化神器” 的创新型互联网服务，它非常实用而且完全免费。它的全称是 If this then that，意思是“如果这样，那么就那样”。简单地讲，IFTTT 的作用就是，如果「这个」网络服务满足条件，那么就自动触发「那个」网络服务去执行一个动作。而条件和动作都是可以由用户自己去根据自身需求设置的。IFTTT 能将前后这两个不同的网络服务神奇般地连通来实现各种各样的功能，并且为你不间断地工作。</p>
+						<p>在阅读下面的文章前，建议先去注册一个 IFTTT 账号，为了方便关联叮当，建议使用叮当的收件邮箱注册。</p>
+					</div>
+					<a data-pjax="" href="#" class="btn more">Read More</a>
+
+					<div class="a-tittle">
+						<div class="date">
+							Jun 20 2018
+						</div>
+						<a href="#">博客标题测试</a>
+					</div>
+					<div class="a-content">
+						<div class="thumbnail">
+							<img src="{{static_url('image/qrcode.jpg')}}">
+						</div>
+						<p>要让叮当能够监控一些关键事件并触发响应操作，除了编写插件之外，还有一个简单省事的方法：利用 IFTTT 。下面我举几个简单的示例，其他的应用场景你们可以尽情发挥想象力。</p>
+						<p>IFTTT 是一个被称为 “网络自动化神器” 的创新型互联网服务，它非常实用而且完全免费。它的全称是 If this then that，意思是“如果这样，那么就那样”。简单地讲，IFTTT 的作用就是，如果「这个」网络服务满足条件，那么就自动触发「那个」网络服务去执行一个动作。而条件和动作都是可以由用户自己去根据自身需求设置的。IFTTT 能将前后这两个不同的网络服务神奇般地连通来实现各种各样的功能，并且为你不间断地工作。</p>
+						<p>在阅读下面的文章前，建议先去注册一个 IFTTT 账号，为了方便关联叮当，建议使用叮当的收件邮箱注册。</p>
+					</div>
+					<a data-pjax="" href="#" class="btn more">Read More</a>
+				</div>
+
+				<div class="page">
+					<center>
+						<ul>
+							<li><a href="#">Prev</a></li>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Next</a></li>
+						</ul>
+					</center>
+				</div>
+			</div>
+			<div class="m-right">
+				<div class="side">
+					<div class="tags">
+						<h4>微信公众号</h4>
+						<img src="{{static_url('image/qrcode.jpg')}}">
+					</div>
+					<div class="tags">
+						<h4>标签云</h4>
+						<div class="tagcloud" id="tagcloud"></div>
+					</div>
+					<div class="tags">
+						<h4>links</h4>
+						<div class="links">
+							<ul>
+								<li><a href="#">浙江省精品课程刷课平台</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		Copyright &copy; 2018 All Rights Reserved Powered by 慕司
+	</div>
+
+	<script>
+
+		var m_top = $("#m-container").offset().top;
+		var isHidden = false;
+		$(window).scroll(function (){
+			var NowTop = $(window).scrollTop();
+			if(NowTop >= m_top){
+				$("#nav").css({
+					opacity: '0.2'
+				});
+				isHidden = true;
+			}else{
+				$("#nav").css({
+					opacity: '1'
+				});
+				isHidden = false;
+			}
+		});
+		$("#nav").hover(
+		  function () {
+		    $("#nav").css({opacity: '1'})
+		  },
+		  function () {
+		  	if(isHidden){
+		  		$("#nav").css({opacity: '0.2'})
+		  	}
+		  }
+		);
+	</script>
+	<script>
+		if(window.screen.width > 980){
+					var words = ["Python", "Javascript", "Linux", "PHP", "Git", "reactjs", "Node.js", "math"];
+					var wordSize = {"Python":45, "Javascript":30, "Linux":15, "PHP":20, "Git":25, "reactjs":30, "Node.js":35, "math":40};
+					var fill = d3.scale.category20();
+					var d3_size = window.getComputedStyle(document.getElementById("tagcloud")).width.replace("px", "");
+			        var layout = d3.layout.cloud()
+			            .size([d3_size, 300])
+			            .words(words.map(function(d) {
+			                return {text: d, size: wordSize[d]};
+			            }))
+			            .padding(3)
+			            .rotate(function() { return ~~(Math.random() * 2) * 90; })
+			            .font("Impact")
+			            .fontSize(function(d) { return d.size; })
+			            .on("end", draw);
+
+			        layout.start();
+
+			function draw(words) {
+			  d3.select("#tagcloud").append("svg")
+			      .attr("width", layout.size()[0])
+			      .attr("height", layout.size()[1])
+			    .append("g")
+			      .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+			    .selectAll("text")
+			      .data(words)
+			    .enter().append("text")
+			      .style("font-size", function(d) { return d.size + "px"; })
+			      .style("font-family", "Impact")
+			      .style("fill", function(d, i) { return fill(i); })
+			      .attr("text-anchor", "middle")
+			      .attr("transform", function(d) {
+			        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+			      })
+			      .text(function(d) { return d.text; });
+			}
+		}
+
+
+	</script>
+
+</body>
+</html>

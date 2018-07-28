@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ylog管理系统</title>
+	<script src="{{static_url('js/jquery.js')}}"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+	<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+	<style>
+		#tittle{
+			width: 99.6%;
+			height: 35px;
+			line-height: 35px;
+			margin-bottom: 20px;
+			border-radius: 5px;
+			border-width: 1px;
+			font-size: 18px;
+			padding-left: 5px;
+		}
+		#date{
+			background-color: #eee;
+			border: 2px solid orange;
+			padding-left: 5px;
+			border-radius: 6px;
+		}
+		.set ul li{
+			list-style: none;
+		}
+		.set button{
+			float: right;
+		    width: 90px;
+		    height: 40px;
+		    border: 0;
+		    background-color: #69a2f7;
+		    border-radius: 28px;
+		    font-size: 17px;
+		    color: #fff;
+		    box-shadow: 3px 5px 2px #888888;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" placeholder="请输入标题" name="tittle" id="tittle">
+	<textarea name="" id="test" cols="30" rows="10"></textarea>
+	<div class="set">
+		<span>Date: <input type="text" value="" id="date"></span><br>
+		<span>标签: </span>
+		<ul>
+			<li><label><input type="checkbox" id="1">Linux</label></li>
+			<li><label><input type="checkbox" id="2">Python</label></li>
+		</ul>
+		<button id="submit">发 布</button>
+	</div>
+
+	<script>
+	var simplemde = new SimpleMDE({ element: document.getElementById("test") });
+	</script>
+	<script>
+		var month = [
+		    "Jan",
+		    "Feb",
+		    "Mar",
+		    "Apr",
+		    "May",
+		    "June",
+		    "July",
+		    "Aug",
+		    "Sept",
+		    "Oct",
+		    "Nov",
+		    "Dec"
+		];
+		var now = new Date();
+		var date = month[now.getMonth()] + " " + now.getDate() + " " + now.getFullYear();
+		$("#date").val(date);
+		$("#submit").click(function () {
+		    var content = $(".editor-preview-side")[0].innerHTML;
+		    var tittle = $("#tittle")[0].value;
+		    var date = $("#date")[0].value;
+		    var tags = new Array();
+		    var oCheckbox = $("input[type=checkbox]");
+            for(var i = 0; i < oCheckbox.length; i++){
+		        if(oCheckbox[i].checked){
+		            tags.push(oCheckbox[i]["name"])
+				}
+			}
+			$.ajax({
+				url: "/admin/WriterPost",
+				method: "post",
+				traditional: true,
+				data: {
+				    "tittle": tittle,
+					"content": content,
+					"date": date,
+					"tags": tags
+				},
+				success: function (data) {
+					console.log(data)
+                }
+			})
+        })
+	</script>
+</body>
+</html>
