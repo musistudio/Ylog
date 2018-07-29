@@ -46,8 +46,9 @@
 		<span>Date: <input type="text" value="" id="date"></span><br>
 		<span>标签: </span>
 		<ul>
-			<li><label><input type="checkbox" id="1">Linux</label></li>
-			<li><label><input type="checkbox" id="2">Python</label></li>
+			{% for tag in tags %}
+			<li><label><input type="checkbox" id="{{tag['id']}}">{{tag['name']}}</label></li>
+			{% end %}
 		</ul>
 		<button id="submit">发 布</button>
 	</div>

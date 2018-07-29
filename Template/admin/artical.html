@@ -49,9 +49,9 @@
 	      </tbody>
 	</table>
 	<div class="btn-group" role="group">
-	  <button type="button" class="btn btn-default">全选</button>
-	  <button type="button" class="btn btn-default">反选</button>
-	  <button type="button" class="btn btn-default">全不选</button>
+	  <button type="button" class="btn btn-default" id="allSelect">全选</button>
+	  <button type="button" class="btn btn-default" id="reSelect">反选</button>
+	  <button type="button" class="btn btn-default" id="noSelect">全不选</button>
 	</div>
 	<button type="button" class="btn btn-default">删除</button>
 
@@ -66,7 +66,26 @@
     </ul>
 
 	<script>
-		
+		var oCheckBox = $("input[type=checkbox]");
+		$("#allSelect").click(function () {
+			for (var i = 0; i < oCheckBox.length; i++){
+			    $(oCheckBox[i]).attr("checked", true)
+			}
+        });
+		$("#reSelect").click(function () {
+			for (var i = 0; i < oCheckBox.length; i++){
+			    if(oCheckBox[i].checked){
+			        $(oCheckBox[i]).attr("checked", false)
+				}else{
+			     	$(oCheckBox[i]).attr("checked", true)
+				}
+			}
+        });
+		$("#noSelect").click(function () {
+			for (var i = 0; i < oCheckBox.length; i++){
+			    $(oCheckBox[i]).attr("checked", false)
+			}
+        });
 	</script>
 </body>
 </html>

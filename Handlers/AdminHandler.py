@@ -53,8 +53,9 @@ class ArticalDelHandler(BaseHandler.BaseHandler):
 #渲染文章编写页面
 class WriterHandler(BaseHandler.BaseHandler):
     def get(self):
-
-        self.render("admin/writer.html")
+        self.table = "tags"
+        tags = self.selectDB()
+        self.render("admin/writer.html", tags=tags)
 
 
 #将文章写入数据库
