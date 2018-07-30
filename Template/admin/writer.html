@@ -82,7 +82,7 @@
 		    var oCheckbox = $("input[type=checkbox]");
             for(var i = 0; i < oCheckbox.length; i++){
 		        if(oCheckbox[i].checked){
-		            tags.push(oCheckbox[i]["name"])
+		            tags.push(oCheckbox[i]["id"])
 				}
 			}
 			$.ajax({
@@ -96,7 +96,10 @@
 					"tags": tags
 				},
 				success: function (data) {
-					console.log(data)
+					if(data == "发布成功"){
+						alert("发布成功!");
+						window.location.href = '/admin/artical.html';
+					}
                 }
 			})
         })

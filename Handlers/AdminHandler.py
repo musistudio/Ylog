@@ -75,7 +75,8 @@ class WriterPostHandler(BaseHandler.BaseHandler):
             "tags": int(tags)
         }
         self.insertDB()
-        self.render("status.html", info="发布成功", url="/admin/artical.html")
+        self.write("发布成功");
+        # self.render("status.html", info="发布成功", url="/admin/artical.html")
         # self.write("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>发布成功!</body></html>")
 
 

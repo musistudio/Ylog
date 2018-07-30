@@ -74,3 +74,5 @@ class BaseHandler(tornado.web.RequestHandler):
         res = DB.fetchone()
         DB.close()
         return res
+
+

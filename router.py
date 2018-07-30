@@ -18,5 +18,9 @@ routers = [
     (r"/admin/tagsadd", AdminHandler.TagsAddHandler),
     (r"/admin/tagsdel/(\d+)", AdminHandler.TagsDelHandler),
     (r"/admin/login.html", AdminHandler.LoginHandler),
-    (r"/yclass/", YclassHandler.IndexHandler)
+    (r"/yclass/", YclassHandler.IndexHandler),
+    (r"/yclass/login", YclassHandler.YclassLogin),
+    (r"/yclass/logout", YclassHandler.YclassLogout),
+    (r"/yclass/classlist", YclassHandler.YclassList),
+    (r"/yclass/classpass", YclassHandler.YclassPass)
 ]
