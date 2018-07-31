@@ -38,8 +38,14 @@ from config import DATABASE
 #
 # print("INSERT INTO EMPLOYEE({}) VALUES ({})".format(keys[:-1], values[:-1]))
 
-count = 11
-if count % 5 == 0:
-    print(int(count / 5))
-else:
-    print(int(count / 5)+1)
+# count = 11
+# if count % 5 == 0:
+#     print(int(count / 5))
+# else:
+#     print(int(count / 5)+1)
+
+
+s = dict(a="1", b="2", c="3", d="4")
+x = "2"
+result = [k for k, v in s.items() if x in v]
+print(result)

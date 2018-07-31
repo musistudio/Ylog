@@ -1,14 +1,19 @@
 from Handlers import BaseHandler
+import tornado.web
 import base64
 
 #渲染后台管理页面
 class AdminHandler(BaseHandler.BaseHandler):
+    
+    @tornado.web.authenticated
     def get(self):
         self.render("admin/admin.html")
 
 
 #渲染文章管理页面
 class ArticalHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def get(self):
         self.table = 'artical'
         articals = self.getData()
@@ -43,6 +48,8 @@ class ArticalHandler(BaseHandler.BaseHandler):
 
 
 class ArticalDelHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def get(self, id):
         self.table = 'artical'
         self.drop_sql = "id = %s" % id
@@ -52,6 +59,8 @@ class ArticalDelHandler(BaseHandler.BaseHandler):
 
 #渲染文章编写页面
 class WriterHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def get(self):
         self.table = "tags"
         tags = self.selectDB()
@@ -60,6 +69,8 @@ class WriterHandler(BaseHandler.BaseHandler):
 
 #将文章写入数据库
 class WriterPostHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def post(self, *args, **kwargs):
         tittle = self.get_argument("tittle")
         content = self.get_argument("content")
@@ -75,13 +86,13 @@ class WriterPostHandler(BaseHandler.BaseHandler):
             "tags": int(tags)
         }
         self.insertDB()
-        self.write("发布成功");
-        # self.render("status.html", info="发布成功", url="/admin/artical.html")
-        # self.write("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>发布成功!</body></html>")
+        self.write("发布成功")
 
 
 #渲染标签管理页面
 class TagsHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def get(self):
         tags = self.getCount()
         self.render("admin/tags.html", tags=tags)
@@ -100,6 +111,8 @@ class TagsHandler(BaseHandler.BaseHandler):
 
 #添加标签实现
 class TagsAddHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def post(self, *args, **kwargs):
         tags_name = self.get_argument("tagsname")
         self.table = 'tags'
@@ -113,6 +126,8 @@ class TagsAddHandler(BaseHandler.BaseHandler):
 
 #删除标签实现
 class TagsDelHandler(BaseHandler.BaseHandler):
+
+    @tornado.web.authenticated
     def get(self, id):
         self.table = 'tags'
         self.drop_sql = "id = %s" % id
@@ -122,10 +137,38 @@ class TagsDelHandler(BaseHandler.BaseHandler):
 
 #渲染登录页面
 class LoginHandler(BaseHandler.BaseHandler):
+
     def get(self):
         self.render("admin/login.html")
 
 
 #登录页面逻辑处理
 class LoginPostHandler(BaseHandler.BaseHandler):
-    pass
+    """docstring for LoginPostHandler"""
+
+    def post(self):
+        username = self.get_argument('username')
+        password = self.get_argument('password')
+        if username == 'admin' and password == '123456':
+            self.set_secure_cookie('admin', password)
+            rsp = {
+                'status': 200,
+                'msg': '登陆成功'
+            }
+        else:
+            rsp = {
+                'status': 401,
+                'msg': '用户名或密码错误'
+            }
+        self.write(rsp)
+
+
+#退出登陆页面
+class LogoutHandler(BaseHandler.BaseHandler):
+    """docstring for Logout"""
+    
+    def get(self):
+        print(self.get_secure_cookie('admin'))
+        self.set_secure_cookie('admin', '')
+        self.write('已退出登陆')
+        

@@ -5,9 +5,9 @@ from config import DATABASE
 
 class BaseHandler(tornado.web.RequestHandler):
 
-    def session_handler(self):
-        self.session = dict()
-        self.cookie = self.get_cookie('xr_cookie')
+    def get_current_user(self):
+        return self.get_secure_cookie('admin')
+
 
     def conDB(self):
         self.con = pymysql.connect(host=DATABASE["host"], user=DATABASE["user"], password=DATABASE["password"], db=DATABASE["dbname"], port=DATABASE["port"], charset="utf8")
@@ -74,5 +74,4 @@ class BaseHandler(tornado.web.RequestHandler):
         res = DB.fetchone()
         DB.close()
         return res
-
 

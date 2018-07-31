@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Ylog管理系统登录</title>
+	<title>Yclass云端看课平台</title>
 	<script src="{{static_url('js/jquery.js')}}"></script>
 	<style>
 	    *{
@@ -60,15 +60,6 @@
 			color: #fff;
 			border-radius: 10px;
 		}
-		.main .findpwd{
-			width: 100%;
-			text-align: right;
-			margin-top: 10px;
-		}
-		.main .findpwd a{
-			text-decoration: none;
-			color: #555;
-		}
 		@keyframes rotate{
 		0%  {transform:rotate(0deg);}
 		50%  {transform:rotate(180deg);}
@@ -87,9 +78,6 @@
 			<input type="password" placeholder="请输入密码" id="password"><br>
 			<button onclick="submit()">登录</button>
 		</div>
-		<div class="findpwd">
-			<a href="#">找回密码 →</a>
-		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -106,7 +94,7 @@
 				type: "json",
 				success: function(data){
 					if(data.status == 200){
-						window.location.href = "/yclass/classpass";
+						window.location.href = "/yclass/classlist";
 					}else if(data.status == 401){
 						alert(data.msg)
 					}

@@ -1,5 +1,6 @@
 from Handlers import BaseHandler
 import tornado.httpclient
+from tornado.websocket import WebSocketHandler
 import json
 import urllib
 
@@ -56,7 +57,7 @@ class YclassLogin(BaseHandler.BaseHandler):
 
 class YclassLogout(BaseHandler.BaseHandler):
 	"""docstring for YclassLogout
-		退出登陆，清楚cookie
+		退出登陆，清除cookie
 	"""
 	def get(self):
 		self.clear_cookie("token")
@@ -95,9 +96,9 @@ class YclassPass(BaseHandler.BaseHandler):
 	
 	@tornado.web.asynchronous
 	@tornado.gen.engine
-	def get(self):
-		# course_id = self.get_argument("course_id")
-		course_id = "30002928"
+	def post(self):
+		course_id = self.get_argument("course_id")
+		# course_id = "30002928"
 		token = str(self.get_secure_cookie("token"), 'utf-8')
 		realname = str(self.get_secure_cookie("realname"), 'utf-8')
 		header = {
@@ -117,7 +118,6 @@ class YclassPass(BaseHandler.BaseHandler):
 			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
 		datas = json.loads(response.body)
-		# self.finish()
 		for data in datas['data']:
 			for sections in data['data']:
 				for section in sections['data']:
@@ -153,3 +153,19 @@ class YclassPass(BaseHandler.BaseHandler):
 		        tim += 20
 		    i += 1
 		    print(videos[i]['catalogName']+'  云端看课(视频)已完成')
+
+
+class MessageHandler(WebSocketHandler):
+	"""docstring for MessageHandler"""
+
+	users = []
+	
+	def open(self):
+		users.
+
+	def on_message(self):
+		pass
+
+	def on_close(self):
+		pass
+		
