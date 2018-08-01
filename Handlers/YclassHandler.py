@@ -78,36 +78,43 @@ class YclassList(BaseHandler.BaseHandler):
 		header = {
 			"cookie": "token-student-zjedu={}; realname-student-zjedu={}; avatar-student-zjedu=null".format(token, realname)
 		}
-		print(header)
 		body = ""
 		client   = tornado.httpclient.AsyncHTTPClient()
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/system/list",\
 			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
-		# dataLists = json.loads(response.body)['data']['dataList']
-		self.write(response.body)
-		self.finish()
+		dataLists = json.loads(response.body)['data']['dataList']
+		self.render('yclass/class.html', classes=dataLists)
 
 
-class YclassPass(BaseHandler.BaseHandler):
+class YclassPass(BaseHandler.BaseHandler, WebSocketHandler):
 	"""docstring for YclassVideo
-		云端看课实现逻辑
 	"""
 	
-	@tornado.web.asynchronous
-	@tornado.gen.engine
-	def post(self):
-		course_id = self.get_argument("course_id")
-		# course_id = "30002928"
-		token = str(self.get_secure_cookie("token"), 'utf-8')
-		realname = str(self.get_secure_cookie("realname"), 'utf-8')
-		header = {
-			"cookie": "token-student-zjedu={}; realname-student-zjedu={}; avatar-student-zjedu=null".format(token, realname)
+	def get(self, id):
+		self.render('yclass/pass.html', id=id)
+
+
+class MessageHandler(WebSocketHandler):
+	"""docstring for MessageHandler
+		云端看课逻辑实现
+	"""
+
+	
+	def open(self):
+		self.realname = str(self.get_secure_cookie("realname"), 'utf-8')
+		self.token = str(self.get_secure_cookie("token"), 'utf-8')
+		self.header = {
+			"cookie": "token-student-zjedu={}; realname-student-zjedu={}; avatar-student-zjedu=null".format(self.token, self.realname)
 		}
-		self.getPdfs(course_id, header)
-		self.getVideos(course_id, header)
-		self.write("success")
-		self.finish()
+
+	def on_message(self, messgae):
+		course_id = messgae
+		self.getPdfs(course_id, self.header)
+		self.getVideos(course_id, self.header)
+
+	def on_close(self):
+		print(self)
 
 	@tornado.web.asynchronous
 	@tornado.gen.engine
@@ -117,6 +124,7 @@ class YclassPass(BaseHandler.BaseHandler):
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/plan/list",\
 			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
+		# print(response.body)
 		datas = json.loads(response.body)
 		for data in datas['data']:
 			for sections in data['data']:
@@ -126,7 +134,7 @@ class YclassPass(BaseHandler.BaseHandler):
 						request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/uploadLearnRate",\
 							method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 						response = yield client.fetch(request)
-						print(section['name']+'  云端看课(pdf)已完成')
+						self.write_message(section['name']+'  云端看课(pdf)已完成')
 
 	@tornado.web.asynchronous
 	@tornado.gen.engine
@@ -144,28 +152,16 @@ class YclassPass(BaseHandler.BaseHandler):
 		    t = int(tm[1]) * 60 + int(tm[2])
 		    j = 0
 		    tim = 0
-		    while(j<int(t/20)+1):
-		        data = 'courseId={}&playPosition={}&unitId={}'.format(course_id, tim, videos[i]['catalogId']) 
-		        request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/uploadLearnRate",\
-		        	method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
-		        response = yield client.fetch(request)
-		        j += 1
-		        tim += 20
-		    i += 1
-		    print(videos[i]['catalogName']+'  云端看课(视频)已完成')
-
-
-class MessageHandler(WebSocketHandler):
-	"""docstring for MessageHandler"""
-
-	users = []
-	
-	def open(self):
-		users.
-
-	def on_message(self):
-		pass
-
-	def on_close(self):
-		pass
+		    try:
+		    	while(j<int(t/20)+1):
+		    		data = 'courseId={}&playPosition={}&unitId={}'.format(course_id, tim, videos[i]['catalogId']) 
+		    		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/uploadLearnRate",\
+		    			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
+		    		response = yield client.fetch(request)
+		    		j += 1
+		    		tim += 20
+		    	i += 1
+		    	self.write_message(videos[i]['catalogName']+'  云端看课(视频)已完成')
+		    except IndexError as e:
+		    	self.write_message("云端看课(所有)已完成")
 		

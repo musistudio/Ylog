@@ -4,10 +4,20 @@
 	<meta charset="UTF-8">
 	<title>课程列表</title>
 	<style type="text/css">
+		h2{
+			text-align: center;
+		}
+		ul{
+			width: 1440px;
+			margin: 0 auto;
+			margin-top: 30px;
+		}
 		li{
 			list-style: none;
 			width: 200px;
 			margin-bottom: 20px;
+			float: left;
+			margin-right: 40px;
 		}
 		li img{
 			width: 200px;
@@ -20,28 +30,17 @@
 </head>
 <body>
 	<div class="container">
+		<h2>请选择课程</h2>
 		<ul>
+			{% for classs in classes %}
 			<li>
-				<img src="http://image.moocollege.com/v2_customer/jZ-GXGy6C7qA6xDTIwuSy1EtENhZFDAZMSnchUYk3NHpAHybk0L9ChwtAZ4xYmXJ_1503113063784">
-				<div>c#程序设计</div>
+				<a href="/yclass/classpass/{{ classs['id'] }}">
+					<img src="{{ classs['cover'] }}">
+					<div>{{ classs['title'] }}</div>
+				</a>
 			</li>
-			<li>
-				<img src="http://image.moocollege.com/v2_customer/jZ-GXGy6C7qA6xDTIwuSy1EtENhZFDAZMSnchUYk3NHpAHybk0L9ChwtAZ4xYmXJ_1503113063784">
-				<div>c#程序设计</div>
-			</li>
-			<li>
-				<img src="http://image.moocollege.com/v2_customer/jZ-GXGy6C7qA6xDTIwuSy1EtENhZFDAZMSnchUYk3NHpAHybk0L9ChwtAZ4xYmXJ_1503113063784">
-				<div>c#程序设计</div>
-			</li>
-			<li>
-				<img src="http://image.moocollege.com/v2_customer/jZ-GXGy6C7qA6xDTIwuSy1EtENhZFDAZMSnchUYk3NHpAHybk0L9ChwtAZ4xYmXJ_1503113063784">
-				<div>c#程序设计</div>
-			</li>
+			{% end %}
 		</ul>
 	</div>
-
-	<script type="text/javascript">
-		
-	</script>
 </body>
 </html>

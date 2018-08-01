@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>云端看课状态</title>
+</head>
+<body>
+    <div>
+        <ul id="contents">
+            <li>正在启动云端看课脚本...</li>
+        </ul>
+    </div>
+    <script src="{{static_url('js/jquery.js')}}"></script>
+    <script type="text/javascript">
+        var ws = new WebSocket("ws://localhost:8000/yclass/message");
+        ws.onmessage = function(e) {
+            $("#contents").append("<li>" + e.data + "</li>");
+        }
+        var test = setTimeout(function(){
+            ws.send("{{ id }}")
+        }, 3000);
+    </script>
+</body>
+</html>

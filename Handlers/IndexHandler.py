@@ -3,9 +3,7 @@ import base64
 
 class IndexHandler(BaseHandler.BaseHandler):
     def get(self):
-        self.table = 'artical'
         datas = self.getData()
-        # print(res)
         for data in datas:
             for res in data:
                 if res == 'content':
@@ -21,8 +19,7 @@ class IndexHandler(BaseHandler.BaseHandler):
 
     def getKeys(self):
         keys = []
-        self.execute_sql = "desc %s;" % self.table
-        results = self.executesDB()
+        results = self.application.executesDB("desc artical;")
         for result in results:
             keys.append(result[0])
         return keys
@@ -30,8 +27,7 @@ class IndexHandler(BaseHandler.BaseHandler):
     def getData(self):
         res = []
         keys = self.getKeys()
-        self.execute_sql = "SELECT * from %s limit 0,5;" % self.table
-        datas = self.executesDB()
+        datas = self.application.executesDB("SELECT * from artical limit 0,5;")
         for data in datas:
             result = dict()
             for key in keys:
@@ -40,8 +36,7 @@ class IndexHandler(BaseHandler.BaseHandler):
         return res
 
     def getPage(self):
-        self.execute_sql = "SELECT count(*) from artical;"
-        count = self.executeDB()[0]
+        count = self.application.executeDB("SELECT count(*) from artical;")[0]
         if count % 5 == 0:
             page = (int(count / 5))
         else:
@@ -66,8 +61,7 @@ class ListHandler(IndexHandler):
     def getData(self):
         res = []
         keys = self.getKeys()
-        self.execute_sql = "SELECT * from {} limit {},5;".format(self.table, (int(self.id)-1)*5)
-        datas = self.executesDB()
+        datas = self.application.executesDB("SELECT * from {} limit {},5;".format(self.table, (int(self.id)-1)*5))
         for data in datas:
             result = dict()
             for key in keys:

@@ -24,5 +24,6 @@ routers = [
     (r"/yclass/login", YclassHandler.YclassLogin),
     (r"/yclass/logout", YclassHandler.YclassLogout),
     (r"/yclass/classlist", YclassHandler.YclassList),
-    (r"/yclass/classpass", YclassHandler.YclassPass)
+    (r"/yclass/classpass/(\d+)", YclassHandler.YclassPass),
+    (r"/yclass/message", YclassHandler.MessageHandler)
 ]
