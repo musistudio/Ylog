@@ -68,10 +68,10 @@
 			    <tbody>
 				{% for tag in tags %}
 			      <tr>
-			        <th>{{tag["id"]}}</th>
-			        <td>{{tag["name"]}}</td>
+			        <th>{{tag["tag_id"]}}</th>
+			        <td>{{tag["tag_name"]}}</td>
 			        <td>{{tag["count"]}}</td>
-			        <td><a href="">修改</a>|<a href="/admin/tagsdel/{{tag['id']}}">删除</a></td>
+			        <td><a href="">修改</a>|<a href="/admin/tagsdel/{{tag['tag_id']}}">删除</a></td>
 			      </tr>
 				{% end %}
 			    </tbody>

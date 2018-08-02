@@ -10,7 +10,7 @@ DATABASE = {
     "port": 3306,
     "user": "root",
     "password": "root",
-    "dbname": "ylog"
+    "dbname": "ylog" 
 }
 
 #tornado项目配置

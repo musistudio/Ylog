@@ -34,7 +34,7 @@ class Application(tornado.web.Application):
         res = []
         for result in results:
             keys.append(result[0])
-        self.db.execute("SELECT * from %s;" % self.table)
+        self.db.execute("SELECT * from %s;" % table)
         datas = self.db.fetchall()
         for data in datas:
             result = dict()
@@ -48,7 +48,7 @@ class Application(tornado.web.Application):
         self.db.execute("commit")
 
     def updateDB(self, table, update_sql, where):
-        self.db.execute("UPDATA {} SET {} WHERE {}".format(self.table, self.update_sql, where))
+        self.db.execute("UPDATE {} SET {} WHERE {}".format(table, update_sql, where))
 
     def executesDB(self, execute_sql):
         self.db.execute(execute_sql)

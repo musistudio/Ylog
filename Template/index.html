@@ -63,17 +63,17 @@
 					<div class="artical-main">
 					<div class="a-tittle">
 						<div class="date">
-							{{ artical['public_time'] }}
+							{{ artical['ar_date'] }}
 						</div>
-						<a href="#">{{artical['tittle']}}</a>
+						<a href="/posts/{{ artical['ar_id'] }}.html">{{artical['ar_tittle']}}</a>
 					</div>
 					<div class="a-content">
-						<div class="thumbnail" style="display: {{ artical['thumbnail'] }}">
-							<img src="{{ artical['thumbnail'] }}" >
+						<div class="thumbnail" style="display: {{ artical['ar_thumbnail'] }}">
+							<img src="{{ artical['ar_thumbnail'] }}" >
 						</div>
-						<p>{{artical['content']}}</p>
+						<p>{{artical['ar_sketch']}}</p>
 					</div>
-					<a data-pjax="" href="#" class="btn more">Read More</a>
+					<a data-pjax="" href="#" class="btn more" href="/posts/{{ artical['ar_id'] }}.html">Read More</a>
 						</div>
 					{% end %}
 				</div>
@@ -132,7 +132,6 @@
 	</script>
 
 	<script>
-
 		var m_top = $("#m-container").offset().top;
 		var isHidden = false;
 		$(window).scroll(function (){
@@ -198,8 +197,6 @@
 			      .text(function(d) { return d.text; });
 			}
 		}
-
-
 	</script>
 
 </body>

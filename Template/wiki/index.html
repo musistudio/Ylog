@@ -1,4 +1,4 @@
-{% autoescape None %}
+ {% autoescape None %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,18 +12,37 @@
 	<script src="{{static_url('js/d3.min.js')}}"></script>
 	<script src="{{static_url('js/d3.layout.cloud.js')}}"></script>
 	<style type="text/css">
-		.tags{
-			height: 100px;
+		.m-container{
+			padding-bottom: 40px;
 		}
+		.main-header{
+			font-size: 20px;
+		}
+		.m-main{
+			width: 95%;
+			margin: 0 auto;
+		}
+		.m-main ul li{
+			list-style: none;
+		}
+		.m-main ul li .tittle{
+			background-color: #eee;
+			font-weight: 700;
+			font-size: 16px;
+			padding: 8px 15px;
+			border-bottom: 1.5px solid #aaa;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+			margin-top: 6px;
+		}
+		.m-main ul li .content{
+			background-color: #f5f5d5;
+			padding: 9px 15px;
+		}
+		
 	</style>
 </head>
 <body>
-<script>
-	var _id = {{ id }};
-	var _isFirst = {{ isFirst }}
-	var _isLast = {{ isLast }};
-</script>
-
 	<div class="nav" id="nav">
 		<div class="n-main">
 			<div class="n-tittle">
@@ -58,35 +77,41 @@
 
 	<div class="main">
 		<div class="m-header">
-			{{ artical['ar_tittle'] }}
+			WiKi
 		</div>
 		<div class="m-container" id="m-container">
-			<div class="m-left">
-				<div class="artical">
-					{{ artical['ar_content'] }}
-				</div>
+			<div class="m-main">
+				<ul>
+					<li>
+						<div class="tittle">
+							<a class="accordion-toggle" data-toggle="collapse" href="#about">
+								<i class="fa fa-bookmark"></i> Info
+							</a>
+						</div>
+						<div class="content collapse in" id="about">
+							<p>这是我现在维护的个人笔记库。</p>
+							<p>和博客不同，它们大多都不是直接来源于我的原创，而是我一边阅读一边整理加工而成的笔记列表。</p>
+							<p>我的目的是将零散的知识点放在一个集中的地方，不断递归重构，形成一套为我所用的知识系统</p>
+						</div>
+					</li>
+					<li>
+						<div class="tittle">Info</div>
+						<div class="content">
+							<p>这是我现在维护的个人笔记库。</p>
+							<p>和博客不同，它们大多都不是直接来源于我的原创，而是我一边阅读一边整理加工而成的笔记列表。</p>
+							<p>我的目的是将零散的知识点放在一个集中的地方，不断递归重构，形成一套为我所用的知识系统</p>
+						</div>
+					</li>
+					<li>
+						<div class="tittle">Info</div>
+						<div class="content">
+							<p>这是我现在维护的个人笔记库。</p>
+							<p>和博客不同，它们大多都不是直接来源于我的原创，而是我一边阅读一边整理加工而成的笔记列表。</p>
+							<p>我的目的是将零散的知识点放在一个集中的地方，不断递归重构，形成一套为我所用的知识系统</p>
+						</div>
+					</li>
+				</ul>
 
-				<div class="page">
-					<center>
-						<ul>
-							<li><a href="#" id="prev">Prev</a></li>
-							<li><a href="/">Home</a></li>
-							<li><a href="#" id="next">Next</a></li>
-						</ul>
-					</center>
-				</div>
-			</div>
-			<div class="m-right">
-				<div class="side">
-					<div class="tags">
-						<h4>date</h4>
-						<div class="tagcloud" id="date">{{ artical['ar_date'] }}</div>
-					</div>
-					<div class="tags">
-						<h4>tags</h4>
-						<div class="tagcloud" id="tags">{{ artical['ar_tags'] }}</div>
-					</div>
-				</div>
 			</div>
 		<div style="clear: both"></div>
 		</div>
@@ -96,20 +121,7 @@
 		Copyright &copy; 2018 All Rights Reserved Powered by 慕司
 	</div>
 
-	<script>
-		if(_isFirst){
-		    $("#prev").attr("href", "javascript:void(0);");
-		    $("#prev").css("color", "#aaa");
-		}else{
-		    $("#prev").attr("href", "/"+(_id-1)+".html");
-		}
-		if(_isLast){
-			$("#next").attr("href", "javascript:void(0);");
-			$("#next").css("color", "#aaa");
-		}else{
-			$("#next").attr("href", "/"+(_id+1)+".html");
-		}
-	</script>
+
 
 	<script>
 		var m_top = $("#m-container").offset().top;
@@ -139,6 +151,6 @@
 		  }
 		);
 	</script>
-
+	
 </body>
 </html>

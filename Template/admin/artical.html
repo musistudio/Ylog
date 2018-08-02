@@ -42,11 +42,11 @@
 	      <tbody>
 		  {% for artical in articals %}
 	        <tr>
-	          <th><input type="checkbox" id="{{artical['id']}}"></th>
-	          <td>{{artical['tittle']}}</td>
-	          <td>{{artical['tags']}}</td>
-	          <td>{{artical['public_time']}}</td>
-	          <td><a href="">编辑</a>|<a href="/admin/articaldel/{{artical['id']}}">删除</a></td>
+	          <th><input type="checkbox" id="{{artical['ar_id']}}"></th>
+	          <td>{{artical['ar_tittle']}}</td>
+	          <td>{{artical['ar_tags']}}</td>
+	          <td>{{artical['ar_date']}}</td>
+	          <td><a href="/admin/articaleditor/{{artical['ar_id']}}">编辑</a>|<a href="/admin/articaldel/{{artical['ar_id']}}">删除</a></td>
 	        </tr>
 		  {% end %}
 	      </tbody>

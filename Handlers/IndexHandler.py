@@ -6,15 +6,15 @@ class IndexHandler(BaseHandler.BaseHandler):
         datas = self.getData()
         for data in datas:
             for res in data:
-                if res == 'content':
+                if res == 'ar_sketch':
                     try:
                         data[res] = base64.b64decode(data[res].encode("utf-8"))
                     except Exception:
                         print("the content is not base64")
-        isLast = "false"
+        isLast = "true"
         page = self.getPage()
-        if page >= 1:
-            isLast = "true"
+        if page > 1:
+            isLast = "false"
         self.render("index.html", articals=datas, id=1, isLast=isLast)
 
     def getKeys(self):
@@ -26,8 +26,8 @@ class IndexHandler(BaseHandler.BaseHandler):
 
     def getData(self):
         res = []
-        keys = self.getKeys()
-        datas = self.application.executesDB("SELECT * from artical limit 0,5;")
+        keys = ['ar_id', 'ar_tittle', 'ar_date', 'ar_sketch', 'ar_thumbnail']
+        datas = self.application.executesDB("SELECT ar_id,ar_tittle,ar_date,ar_sketch,ar_thumbnail from artical limit 0,5;")
         for data in datas:
             result = dict()
             for key in keys:
@@ -60,11 +60,19 @@ class ListHandler(IndexHandler):
 
     def getData(self):
         res = []
-        keys = self.getKeys()
-        datas = self.application.executesDB("SELECT * from {} limit {},5;".format(self.table, (int(self.id)-1)*5))
+        keys = ['ar_id', 'ar_tittle', 'ar_date', 'ar_sketch', 'ar_thumbnail']
+        datas = self.application.executesDB("SELECT ar_id,ar_tittle,ar_date,ar_sketch,ar_thumbnail from {} limit {},5;".format(self.table, (int(self.id)-1)*5))
         for data in datas:
             result = dict()
             for key in keys:
                 result[key] = data[keys.index(key)]
             res.append(result)
         return res
+
+    def getPage(self):
+        count = self.application.executeDB("SELECT count(*) from artical;")[0]
+        if count % 5 == 0:
+            page = (int(count / 5))
+        else:
+            page = (int(count / 5) + 1)
+        return page

@@ -60,11 +60,15 @@
 			{% end %}
 		</ul>
 
-		<button id="submit">发 布</button>
+		<button id="submit">更  新</button>
 	</div>
 
 	<script>
 	var simplemde = new SimpleMDE({ element: document.getElementById("test") });
+	simplemde.value("{{ artical['ar_source'] }}");
+	$("#tittle").val("{{ artical['ar_tittle'] }}");
+	$("#sketch").val("{{ artical['ar_sketch'] }}");
+	$("#thumbnail").val("{{ artical['ar_thumbnail'] }}");
 	</script>
 	<script>
 		var month = [
@@ -99,10 +103,11 @@
 				}
 			}
 			$.ajax({
-				url: "/admin/WriterPost",
+				url: "/admin/editorpost",
 				method: "post",
 				traditional: true,
 				data: {
+					"id": "{{artical['ar_id']}}",
 				    "tittle": tittle,
 				    "sketch": sketch,
 					"content": content,
@@ -112,8 +117,8 @@
 					"thumbnail": thumbnail
 				},
 				success: function (data) {
-					if(data == "发布成功"){
-						alert("发布成功!");
+					if(data.status == 200){
+						alert(data.msg);
 						window.location.href = '/admin/artical.html';
 					}
                 }

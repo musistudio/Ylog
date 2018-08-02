@@ -106,7 +106,7 @@
 				success: function(data){
 					if(data.status == 200){
 						window.location.href = "/admin/";
-					}else if(data.status == 401){
+					}else {
 						alert(data.msg)
 					}
 				}
