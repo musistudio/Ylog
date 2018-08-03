@@ -1,4 +1,3 @@
-{% autoescape None %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,7 @@
 	<title>慕司的个人博客</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link rel="stylesheet" href="{{static_url('css/bootstrap.min.css')}}"/>
+	<link rel="stylesheet" type="text/css" href="{{static_url('css/font-awesome.min.css')}}">
 	<script src="{{static_url('js/jquery.js')}}"></script>
 	<script src="{{static_url('js/bootstrap.min.js')}}"></script>
 	<link rel="stylesheet" href="{{static_url('css/style.css')}}">
@@ -21,7 +21,7 @@
 	<div class="nav" id="nav">
 		<div class="n-main">
 			<div class="n-tittle">
-				<a href="http://www.musiiot.top">慕司</a>
+				<a href="/">慕司</a>
 			</div>
 			<div class="n-nav">
 				<button type="button" class="btn btn-default" aria-label="Justify" style="background-color: #000;border-color: #000;" data-toggle="collapse" data-parent="#accordion" href="#m-nav">
@@ -31,19 +31,19 @@
 			<div id="m-nav" class="panel-collapse collapse">
 				<ul>
 					<li>
-						<a href="/archive">Archive</a>
+						<a href="/archive"><i class="fa fa-archive"></i>Archive</a>
 					</li>
 					<li>
-						<a href="/wiki">Wiki</a>
+						<a href="/wiki"><i class="fa fa-tasks"></i>WiKi</a>
 					</li>
 					<li>
-						<a href="https://github.com/musistudio">Github</a>
+						<a href="https://github.com/musistudio"><i class="fa fa-github fa-lg"></i>Github</a>
 					</li>
 					<li>
-						<a href="/subscribe">Subscribe</a>
+						<a href="/subscribe"><i class="fa fa-rss"></i>Subscribe</a>
 					</li>
 					<li>
-						<a href="/about">About</a>
+						<a href="/about"><i class="fa fa-user"></i>About</a>
 					</li>
 				</ul>
 			</div>
@@ -73,7 +73,7 @@
 						</div>
 						<p>{{artical['ar_sketch']}}</p>
 					</div>
-					<a data-pjax="" href="#" class="btn more" href="/posts/{{ artical['ar_id'] }}.html">Read More</a>
+					<a data-pjax="" href="/posts/{{ artical['ar_id'] }}.html" class="btn more" href="/posts/{{ artical['ar_id'] }}.html">Read More</a>
 						</div>
 					{% end %}
 				</div>
@@ -102,7 +102,7 @@
 						<h4>links</h4>
 						<div class="links">
 							<ul>
-								<li><a href="#">浙江省精品课程云端看课平台</a></li>
+								<li><a href="/yclass/">浙江省精品课程云端看课平台</a></li>
 							</ul>
 						</div>
 					</div>

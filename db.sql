@@ -28,6 +28,7 @@ create table notes(
 	nt_id int primary key auto_increment,
 	nt_tittle varchar(20) not null,
 	nt_content text not null,
+	nt_source text not null,
 	nt_cate int not null,
 	constraint nt_cate foreign key(nt_cate) references note_categories(nc_id)
 );
@@ -48,5 +49,3 @@ create table yclass_code(
 	isuse varchar(5) default 'False'
 );
 insert into admin(ad_id, ad_user, ad_pwd) value(null, 'admin', 'b696f4b762a4e739c92b21ea3d3e1885');
-insert into tags(tag_id, tag_name) value(null, 'Linux');
-insert into artical(ar_id, ar_tittle,ar_content,ar_date,ar_sketch,ar_thumbnail,ar_tags) value (null, '文章测试', '这是文章测试内容','Aug 2 2018','这是文章测试简介','http://ylog-images.oss-cn-hangzhou.aliyuncs.com/18-8-2/28651778.jpg',1);

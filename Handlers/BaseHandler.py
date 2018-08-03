@@ -4,6 +4,16 @@ from config import DATABASE
 
 
 class BaseHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write_error(404)
+        
+    def write_error(self, status_code, **kwargs):
+        if status_code == 404:
+            self.render('404.html')
+        elif status_code == 500:
+            self.render('500.html')
+        else:
+            self.write('error:' + str(status_code))
 
     def get_current_user(self):
         return self.get_secure_cookie('admin')

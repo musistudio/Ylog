@@ -15,7 +15,7 @@
 			<span class="logo"><img src="{{static_url('image/icon.jpg')}}" height="50px;"></span>
 			<span class="logo">Ylog Admin</span>
 			<ul>
-				<li><a href="#" class="nav active">文章</a></li>
+				<li><a href="" class="nav active">文章</a></li>
 				<li><a href="#" class="nav">wiki</a></li>
 				<li><a href="#" class="nav">设置</a></li>
 			</ul>
@@ -33,6 +33,7 @@
 				<ul id="wiki" style="display: none;">
 					<li><a href="#">wiki manager</a></li>
 					<li><a href="#">new wiki</a></li>
+					<li><a href="#">new categories</a></li>
 				</ul>
 				<ul id="setting" style="display: none;">
 					<li><a href="#">站点设置</a></li>
@@ -48,6 +49,7 @@
 	<script>
 		var oIframe = document.getElementById('iframe');
 		var oNav = document.getElementsByClassName("nav");
+		var oLNav = document.getElementsByClassName("l-content")[0].getElementsByTagName("li");
 		for(var i = 0; i < oNav.length; i++){
 			(function(i){
 				oNav[i].addEventListener("click", function(){
@@ -55,14 +57,18 @@
 						document.getElementById("wiki").style.display = 'none';
 						document.getElementById("setting").style.display = 'none';
 						document.getElementById("page").style.display = '';
+						oIframe.src = 'artical.html';
 					}else if(i == 1){
 						document.getElementById("page").style.display = 'none';
 						document.getElementById("setting").style.display = 'none';
 						document.getElementById("wiki").style.display = '';
+						oIframe.src = 'wiki.html';
+						$(oLNav[3]).addClass('active');
 					}else if(i == 2){
 						document.getElementById("wiki").style.display = 'none';
 						document.getElementById("page").style.display = 'none';
 						document.getElementById("setting").style.display = '';
+						$(oLNav[6]).addClass('active');
 					}
 					for(var j = 0; j < oNav.length; j++){
 						(function(j){
@@ -75,7 +81,6 @@
 		}
 	</script>
 	<script>
-		var oLNav = document.getElementsByClassName("l-content")[0].getElementsByTagName("li");
 		for(var i = 0; i < oLNav.length; i++){
 			(function(i){
 				oLNav[i].addEventListener("click", function(){
@@ -90,6 +95,12 @@
 						oIframe.src = 'writer.html';
 					}else if(i == 2){
 						oIframe.src = 'tags.html';
+					}else if(i == 3){
+						oIframe.src = 'wiki.html';
+					}else if(i == 4){
+						oIframe.src = 'wwriter.html';
+					}else if(i == 5){
+						oIframe.src = 'wcategories.html';
 					}
 					$(oLNav[i]).addClass('active');
 				}, false);

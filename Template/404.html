@@ -1,10 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>您访问的页面丢了</title>
-</head>
-<body>
-您访问的页面丢了
-</body>
+	<head>
+		<meta charset="utf-8">
+		<title>Page not found.</title>
+		<link rel="stylesheet" media="screen" href="{{static_url('css/404.css')}}">
+	</head>
+	<body>
+		<p class="error">404</p>
+		
+		<div class="content">
+			<h2>page coulnd't be found</h2>
+			
+			<p class="text">
+				Sorry,the server could'd found this page! Please try again later!<br />
+				I will jump to the front page in 3 seconds
+			</p>
+				
+			<p class="links">
+				<a id="button" href="/">Go Home</a>
+			</p>
+		</div>
+		<script type="text/javascript">
+			var timer = setTimeout(function(){
+				window.location.href = '/';
+			},3000)
+		</script>
+	</body>
 </html>

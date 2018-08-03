@@ -3,6 +3,55 @@ import tornado.web
 import base64
 import hashlib
 
+
+
+# 渲染登录页面
+class LoginHandler(BaseHandler.BaseHandler):
+
+    def get(self):
+        self.render("admin/login.html")
+
+
+# 登录逻辑处理
+class LoginPostHandler(BaseHandler.BaseHandler):
+    """docstring for LoginPostHandler"""
+
+    def post(self):
+        md5 = hashlib.md5()
+        username = self.get_argument('username')
+        password = md5.update(self.get_argument('password').encode('utf-8'))
+        try:
+            db_password = self.application.executeDB(
+                "select ad_pwd from admin where ad_user='%s'" % username)[0]
+            if md5.hexdigest() == db_password:
+                self.set_secure_cookie('admin', db_password)
+                rsp = {
+                    'status': 200,
+                    'msg': '登陆成功'
+                }
+            else:
+                rsp = {
+                    'status': 401,
+                    'msg': '用户名或密码错误'
+                }
+        except TypeError:
+            rsp = {
+                'status': 403,
+                'msg': '用户名不存在'
+            }
+        self.write(rsp)
+
+
+# 退出登陆
+class LogoutHandler(BaseHandler.BaseHandler):
+    """docstring for Logout"""
+
+    def get(self):
+        print(self.get_secure_cookie('admin'))
+        self.set_secure_cookie('admin', '')
+        self.write('已退出登陆')
+
+
 # 渲染后台管理页面
 class AdminHandler(BaseHandler.BaseHandler):
 
@@ -79,10 +128,10 @@ class EditorHandler(BaseHandler.BaseHandler):
         artical['ar_sketch'] = base64.b64decode(artical['ar_sketch'].encode("utf-8"))
         artical['ar_source'] = base64.b64decode(artical['ar_source'].encode("utf-8"))
         self.render("admin/editor.html", artical=artical, tags=tags)
-        
 
 
-#编辑文章提交页面
+
+#编辑文章提交实现
 class EditorPostHandler(BaseHandler.BaseHandler):
     """docstring for EditorPostHandler"""
     
@@ -109,7 +158,7 @@ class EditorPostHandler(BaseHandler.BaseHandler):
         
 
 
-# 将文章写入数据库
+# 新建文章提交实现代码
 class WriterPostHandler(BaseHandler.BaseHandler):
 
     @tornado.web.authenticated
@@ -177,48 +226,133 @@ class TagsDelHandler(BaseHandler.BaseHandler):
         self.render("status.html", info="删除成功", url="/admin/tags.html")
 
 
-# 渲染登录页面
-class LoginHandler(BaseHandler.BaseHandler):
 
+#渲染wiki管理页面
+class WikiManagerHandler(BaseHandler.BaseHandler):
+    """docstring for WikiManagerHandler"""
+    
     def get(self):
-        self.render("admin/login.html")
+        wikis = self.application.selectDB('notes')
+        self.render('admin/wiki.html', wikis=wikis)
+        
 
 
-# 登录页面逻辑处理
-class LoginPostHandler(BaseHandler.BaseHandler):
-    """docstring for LoginPostHandler"""
+#渲染wiki保存页面
+class WikiWriteHander(BaseHandler.BaseHandler):
+    """docstring for WikiWriteHander"""
+    
+    def get(self):
+        categories = self.application.selectDB('note_categories')
+        self.render('admin/wwriter.html', categories=categories)
 
+
+
+#保存wiki实现
+class WWritePostHander(BaseHandler.BaseHandler):
+    """docstring for WWritePostHander"""
+    
     def post(self):
-        md5 = hashlib.md5()
-        username = self.get_argument('username')
-        password = md5.update(self.get_argument('password').encode('utf-8'))
-        try:
-            db_password = self.application.executeDB(
-                "select ad_pwd from admin where ad_user='%s'" % username)[0]
-            if md5.hexdigest() == db_password:
-                self.set_secure_cookie('admin', db_password)
-                rsp = {
-                    'status': 200,
-                    'msg': '登陆成功'
-                }
-            else:
-                rsp = {
-                    'status': 401,
-                    'msg': '用户名或密码错误'
-                }
-        except TypeError:
-            rsp = {
-                'status': 403,
-                'msg': '用户名不存在'
-            }
-        self.write(rsp)
+        tittle = self.get_argument('tittle')
+        content = self.get_argument('content')
+        source = self.get_argument('source')
+        cate = self.get_argument('cate')
+        insert_sql = {
+            "nt_id": "null",
+            "nt_tittle": tittle,
+            "nt_content": base64.b64encode(content.encode(encoding="utf-8")).decode(),
+            "nt_source": base64.b64encode(source.encode(encoding="utf-8")).decode(),
+            "nt_cate": int(cate)
+        }
+        self.application.insertDB("notes", insert_sql)
+        resp = {
+            "status": 200,
+            "msg": "保存成功"
+        }
+        self.write(resp)
+        
+        
+
+#wiki删除实现
+class WikiDelHandler(BaseHandler.BaseHandler):
+    """docstring for WikiDelHandler"""
+    
+    def get(self, id):
+        self.application.dropDB('notes', 'nt_id=%s' %id)
+        self.render("status.html", info="删除成功", url="/admin/wiki.html")
 
 
-# 退出登陆页面
-class LogoutHandler(BaseHandler.BaseHandler):
-    """docstring for Logout"""
-
+#渲染wiki分类管理页面
+class WcategoriesHandler(BaseHandler.BaseHandler):
+    """docstring for WcategoriesHandler"""
+    
     def get(self):
-        print(self.get_secure_cookie('admin'))
-        self.set_secure_cookie('admin', '')
-        self.write('已退出登陆')
+        datas = self.application.selectDB('note_categories')
+        for data in datas:
+            data['count'] = self.getCount(data['nc_id'])[0]
+        self.render('admin/wcategories.html', categories=datas)
+
+    def getCount(self, id):
+        res = self.application.executeDB('select count(*) from notes where nt_cate=%s' % id)
+        return res
+
+
+
+#渲染wiki修改页面
+class WikiUpHandler(BaseHandler.BaseHandler):
+    """docstring for WikiUpHandler"""
+    
+    def get(self, id):
+        keys = ['nt_id', 'nt_tittle', 'nt_source', 'nt_cate']
+        cate = self.application.selectDB('note_categories')
+        result = self.application.executeDB('select nt_id,nt_tittle,nt_source,nt_cate from notes where nt_id = %s' % id)
+        wiki = dict()
+        for key in keys:
+            wiki[key] = result[keys.index(key)]
+        wiki['nt_source'] = base64.b64decode(wiki['nt_source'].encode("utf-8"))
+        self.render("admin/weditor.html", wiki=wiki, cates=cate)
+
+
+
+class WikiUpPostHandler(BaseHandler.BaseHandler):
+    """docstring for WikiUpPostHandler"""
+    
+    def post(self):
+        id = self.get_argument('id')
+        tittle = self.get_argument('tittle')
+        content = self.get_argument('content')
+        source = self.get_argument('source')
+        cate = self.get_argument('cate')
+        # insert_sql = {
+        #     "nt_id": "null",
+        #     "nt_tittle": tittle,
+        #     "nt_content": base64.b64encode(content.encode(encoding="utf-8")).decode(),
+        #     "nt_source": base64.b64encode(source.encode(encoding="utf-8")).decode(),
+        #     "nt_cate": int(cate)
+        # }
+        update_sql = "nt_id=null,nt_tittle='{}',nt_content='{}',nt_source='{}',nt_cate={}".format(tittle, \
+            base64.b64encode(content.encode(encoding="utf-8")).decode(),base64.b64encode(source.encode(encoding="utf-8")).decode(),int(cate))
+        self.application.updateDB('notes', update_sql, 'nt_id=%s' %id)
+        resp = {
+            "status": 200,
+            "msg": "保存成功"
+        }
+        self.write(resp)
+        
+
+
+#添加wiki分类实现
+class WcategoriesAddHandler(BaseHandler.BaseHandler):
+    """docstring for WcategoriesHandler"""
+    
+    def post(self):
+        name = self.get_argument('categoriesname')
+        insert_sql = {
+            "nc_id": "null",
+            "nc_name": name
+        }
+        self.application.insertDB('note_categories', insert_sql)
+        resp = {
+            "status": 200,
+            "msg": "添加成功"
+        }
+        self.write(resp)

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ylog管理系统</title>
+	<script src="{{static_url('js/jquery.js')}}"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+	<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+	<style>
+		#tittle{
+			width: 99.6%;
+			height: 35px;
+			line-height: 35px;
+			margin-bottom: 20px;
+			border-radius: 5px;
+			border-width: 1px;
+			font-size: 18px;
+			padding-left: 5px;
+		}
+		.set ul li{
+			list-style: none;
+		}
+		.set span{
+			display: block;
+		}
+		.set span a{
+			text-decoration: none;
+			color: #000;
+		}
+		.set span input{
+			background-color: #eee;
+			border: 2px solid orange;
+			padding-left: 5px;
+			border-radius: 6px;
+		}
+		.set button{
+			float: right;
+		    width: 90px;
+		    height: 40px;
+		    border: 0;
+		    background-color: #69a2f7;
+		    border-radius: 28px;
+		    font-size: 17px;
+		    color: #fff;
+		    box-shadow: 3px 5px 2px #888888;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" placeholder="请输入标题" name="tittle" id="tittle">
+	<textarea name="" id="test" cols="30" rows="10"></textarea>
+	<div class="set">
+		<span>分类: </span>
+		<ul>
+			{% for cate in cates %}
+			<li><label><input type="radio" id="{{cate['nc_id']}}" name="categories">{{cate['nc_name']}}</label></li>
+			{% end %}
+		</ul>
+
+		<button id="submit">保  存</button>
+	</div>
+
+	<script>
+	var simplemde = new SimpleMDE({ element: document.getElementById("test") });
+	simplemde.value("{{ wiki['nt_source'] }}");
+	$("#tittle").val("{{ wiki['nt_tittle'] }}");
+	</script>
+	<script>
+		$("#submit").click(function () {
+		    var content = $(".editor-preview-side")[0].innerHTML;
+		    var tittle = $("#tittle")[0].value;
+		    var source = simplemde.value();
+		    var cate = '';
+		    var oCheckbox = $("input[type=radio]");
+            for(var i = 0; i < oCheckbox.length; i++){
+		        if(oCheckbox[i].checked){
+		            cate = oCheckbox[i]["id"];
+				}
+			}
+			$.ajax({
+				url: "/admin/weditorpost",
+				method: "post",
+				traditional: true,
+				data: {
+					"id": "{{ wiki['nt_id'] }}",
+				    "tittle": tittle,
+					"content": content,
+					"source": source,
+					"cate": cate
+				},
+				success: function (data) {
+					if(data.status == 200){
+						alert("保存成功!");
+						window.location.href = '/admin/wiki.html';
+					}
+                }
+			})
+        })
+	</script>
+</body>
+</html>

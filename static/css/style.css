@@ -45,7 +45,9 @@ body{
 	border-left: 3px solid;
 	padding-left: 5px;
 }
-
+#m-nav ul li a i{
+	margin-right: 5px;
+}
 .main .m-container .m-left .artical .a-tittle a{
 	color: #000;
 }
@@ -129,7 +131,6 @@ body{
 .footer{
 	height: 50px;
 	line-height: 50px;
-	width: 380px;
 	margin: 10px auto;
 	text-align: center;
 	background-color: rgba(245, 245, 245, .8);
@@ -266,6 +267,9 @@ body{
 		font-size: 18px;
 		font-weight: 200;
 	}
+	.footer{
+		width: 380px;
+	}
 }
 
 @media only screen and (max-width: 980px){
@@ -304,6 +308,7 @@ body{
 		list-style: none;
 		height: 32px;
 		line-height: 32px;
+		padding-left: 20px;
 	}
 	.nav .n-main #m-nav li a{
 		color: #999;
@@ -354,6 +359,11 @@ body{
 	}
 	.main .m-container .m-left .artical .a-content .thumbnail img{
 		height: 100px;
+	}
+	.footer{
+		height: auto;
+		line-height: 35px;
+		width: 95%;
 	}
 
 }

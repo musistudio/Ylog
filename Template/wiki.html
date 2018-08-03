@@ -11,50 +11,15 @@
 	<link rel="stylesheet" href="{{static_url('css/style.css')}}">
 	<script src="{{static_url('js/d3.min.js')}}"></script>
 	<script src="{{static_url('js/d3.layout.cloud.js')}}"></script>
-	<style type="text/css">
-		.m-container{
-			padding-bottom: 40px;
-		}
-		.main-header{
-			font-size: 20px;
-		}
-		.m-main{
-			width: 95%;
-			margin: 0 auto;
-		}
-		.m-main ul li{
-			list-style: none;
-		}
-		.tittle a{
-			display: block;
-			width: 100%;
-		}
-		.m-main ul li .tittle{
-			background-color: #eee;
-			font-weight: 700;
-			font-size: 16px;
-			padding: 8px 15px;
-			border-bottom: 1.5px solid #aaa;
-			border-top-left-radius: 5px;
-			border-top-right-radius: 5px;
-			margin-top: 6px;
-		}
-		.m-main ul li .content{
-			background-color: #f5f5d5;
-			padding: 9px 15px;
-		}
-		.m-main ul li .content li{
-			margin-left: 15px;
-			list-style: disc;
-		}
-		
-	</style>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 </head>
 <body>
+
+
 	<div class="nav" id="nav">
 		<div class="n-main">
 			<div class="n-tittle">
-				<a href="http://www.musiiot.top">慕司</a>
+				<a href="/">慕司</a>
 			</div>
 			<div class="n-nav">
 				<button type="button" class="btn btn-default" aria-label="Justify" style="background-color: #000;border-color: #000;" data-toggle="collapse" data-parent="#accordion" href="#m-nav">
@@ -85,42 +50,13 @@
 
 	<div class="main">
 		<div class="m-header">
-			<i class="fa fa-tasks" style="margin-right: 5px;"></i>WiKi
+			{{ wiki['nt_tittle'] }}
 		</div>
 		<div class="m-container" id="m-container">
-			<div class="m-main">
-				<ul>
-					<li>
-						<div class="tittle">
-							<a class="accordion-toggle" data-toggle="collapse" href="#about">
-								<i class="fa fa-bookmark"></i> Info
-							</a>
-						</div>
-						<div class="content collapse in" id="about" style="background-color: #E8FFFF">
-							<p>这是由我维护的个人笔记库。</p>
-							<p>这个笔记库主要用于记录平时学习的零散知识。</p>
-							<p>我希望能将零散的知识集中的放在一个地方，让这些知识能为我所用</p>
-						</div>
-					</li>
-
-					{% for wiki in wikis %}
-					<li>
-						<div class="tittle">
-							<a class="accordion-toggle" data-toggle="collapse" href="#{{ wiki['nc_id']}}">
-								<i class="fa fa-folder"></i> {{ wiki['nc_name']}}
-							</a>
-						</div>
-						<div class="content collapse" id="{{ wiki['nc_id' ]}}">
-							<ul>
-								{% for list in wiki['lists'] %}
-								<li><a href="/wiki/{{ list['nt_id'] }}.html">{{ list['nt_tittle'] }}</a></li>
-								{% end %}
-							</ul>
-						</div>
-					</li>
-					{% end %}
-				</ul>
-
+			<div class="m-left">
+				<div class="artical">
+					{{ wiki['nt_content'] }}
+				</div>
 			</div>
 		<div style="clear: both"></div>
 		</div>
@@ -129,8 +65,6 @@
 	<div class="footer">
 		Copyright &copy; 2018 All Rights Reserved Powered by 慕司
 	</div>
-
-
 
 	<script>
 		var m_top = $("#m-container").offset().top;
@@ -160,6 +94,6 @@
 		  }
 		);
 	</script>
-	
+
 </body>
 </html>
