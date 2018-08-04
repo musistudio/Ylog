@@ -16,6 +16,7 @@
 			width: 372px;
 			text-align: center;
 			margin: 0 auto;
+			position: relative;
 		}
 		.main .icon img{
 			width: 80px;
@@ -32,10 +33,26 @@
 		}
 		.main .form{
 			width: 380px;
-			height: 200px;
+			height: 350px;
 			margin-top: 10px;
 			background-color: #fff;
 			text-align: center;
+			padding-top: 20px;
+		}
+		.main .form li{
+			list-style: none;
+			float: left;
+			width: 45%;
+			margin-bottom: 10px;
+		}
+		#code{
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
+		.main .form li button{
+			width: 100%;
+			height: 50px;
+
 		}
 		.main .form input{
 			width: 90%;
@@ -44,15 +61,31 @@
 			padding-left: 5px;
 			font-size: 16px;
 		}
-		.main .form input:nth-child(2){
+		.main .form input:nth-child(1){
 			margin-top: 5px;
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
 			margin-bottom: -1px;
 		}
-		.main .form input:nth-child(4){
+		#password{
 			border-bottom-left-radius: 10px;
 			border-bottom-right-radius: 10px;
+		}
+		#spwd{
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
+		#sresult{
+			position: absolute;
+			background-color: #fff;
+			width: 94%;
+			left: 4%;
+		}
+		#sresult li{
+			width: 100%;
+			border: 1px solid #eee;
+			margin-bottom: 0;
+			height: 30px;
 		}
 		.main .form button{
 			width: 90%;
@@ -70,6 +103,21 @@
 		100% {transform:rotate(360deg);}
 	    }
 	</style>
+	<script type="text/javascript">
+		_type = 'zh';
+		function change(id){
+			if(id == 'zh'){
+				$('#zh').css('display', '');
+				$('#xh').css('display', 'none');
+				_type = 'zh';
+			}else{
+				$('#zh').css('display', 'none');
+				$('#xh').css('display', '');
+				_type = 'xh';
+			}
+			
+		}
+	</script>
 </head>
 <body>
 	<div class="main">
@@ -77,29 +125,112 @@
 			<img src="{{static_url('image/icon.jpg')}}" alt=""> <span>&</span> <img src="{{static_url('image/class-logo.png')}}" alt="">
 		</div>
 		<div class="form">
-			<h2>输入账号进行刷课</h4>
-			<input type="text" placeholder="请输入学号" id="username"><br>
-			<input type="password" placeholder="请输入密码" id="password"><br>
+			<h2>请先登陆</h4>
+				<ul>
+					<li style="margin-left: 3%">
+						<button onclick="change('zh')">账号登陆</button>
+					</li>
+					<li style="margin-left: 4%">
+						<button onclick="change('xh')">学号登陆</button>
+					</li>
+				</ul>
+			<span style="display: ;" id="zh">
+				<input type="text" placeholder="用户名/手机号/邮箱" id="username"><br>
+				<input type="password" placeholder="请输入密码" id="password"><br>
+			</span>
+			<span style="display: none;" id="xh">
+				<input type="text" placeholder="请输入学校名" id="school" onkeyup="search()"><br>
+				<ul id="sresult">
+				</ul>
+				<input type="text" placeholder="请输入学号" id="snum"><br>
+				<input type="password" placeholder="请输入密码" id="spwd"><br>
+			</span>
+			<input type="text" placeholder="请输入授权码(提示没有使用资格时输入)" id="code" style="display: none;"><br>
 			<button onclick="submit()">登录</button>
 		</div>
 	</div>
 
+
+
+<script type="text/javascript">
+	function search(){
+		var school = $("#school").val();
+		$.ajax({
+			url: '/yclass/search',
+			method: 'post',
+			data: {
+				"school": school
+			},
+			type: 'json',
+			success: function(data){
+				res = data.data;
+				var htmls ='';
+				for(var i = 0; i < res.length; i++){
+					htmls += '<li onclick="selectSchool(this)" id="' + res[i].key + '">' + res[i].value +'</li>';
+				}
+				console.log(htmls)
+				$('#sresult').html(htmls) 
+			}
+		})
+	}
+	function selectSchool(obj){
+		$('#school').val(obj.innerText);
+		_schoolId = obj.id;
+		$('#sresult').css('display', 'none');
+	}
+</script>
 	<script type="text/javascript">
 		function submit(){
 			var username = $("#username").val();
 			var password = $("#password").val();
+			var school = $("#school").val();
+			var snum = $("#snum").val();
+			var spwd = $("#spwd").val();
+			var code = $("#code").val();
+			if(_type == 'zh'){
+				if(username == '' || password == ''){
+					alert('用户名和密码不能为空')
+					return 'false'
+				}
+				data = {
+					"type": "zh",
+					"username": username,
+					"password": password,
+					"code": code
+				}
+			}else if(_type == 'xh'){
+				if(school == '' || snum == '' || spwd == '' || _schoolId == ''){
+					alert('学校用户名和密码不能为空\n学校一定要选择下拉框，手输无效')
+					return 'false'
+				}
+				data = {
+					"type": "xh",
+					"school": _schoolId,
+					"snum": snum,
+					"spwd": spwd,
+					"code": code
+				}
+			}
 			$.ajax({
 				url: '/yclass/login',
 				method: 'post',
-				data: {
-					"username": username,
-					"password": password
-				},
+				data: data,
 				type: "json",
 				success: function(data){
 					if(data.status == 200){
 						window.location.href = "/yclass/classlist";
-					}else if(data.status == 401){
+					}else if(data.status == 500){
+						alert(data.msg)
+						$('#password').css({
+							'border-bottom-left-radius': '0',
+							'border-bottom-right-radius': '0'
+						});
+						$('#spwd').css({
+							'border-bottom-left-radius': '0',
+							'border-bottom-right-radius': '0'
+						});
+						$('#code').css('display','')
+					}else{
 						alert(data.msg)
 					}
 				}

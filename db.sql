@@ -34,7 +34,7 @@ create table notes(
 );
 create table yclass_users(
 	yu_id int primary key auto_increment,
-	yu_useranme varchar(20) not null,
+	yu_username varchar(20) not null,
 	yu_realname varchar(20) not null,
 	yu_email varchar(30),
 	yu_phone varchar(11)

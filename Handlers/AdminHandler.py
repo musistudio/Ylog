@@ -2,6 +2,7 @@ from Handlers import BaseHandler
 import tornado.web
 import base64
 import hashlib
+import string,random
 
 
 
@@ -356,3 +357,45 @@ class WcategoriesAddHandler(BaseHandler.BaseHandler):
             "msg": "添加成功"
         }
         self.write(resp)
+
+
+#渲染yclass授权码管理页面
+class YclassHandler(BaseHandler.BaseHandler):
+    """docstring for ClassName"""
+    
+    def get(self):
+        codes = self.application.selectDB('yclass_code')
+        self.render('admin/ycode.html', codes=codes)
+
+
+
+#yclass授权码添加
+class YclassCodeHandler(BaseHandler.BaseHandler):
+    """docstring for ClassName"""
+    
+    def post(self):
+        code = ''
+        words = ''.join((string.ascii_letters,string.digits))
+        for i in range(6):
+            code += random.choice(words)
+        insert_sql = {
+            "yc_id": "null",
+            "code": code,
+            "isuse": "False"
+        }
+        self.application.insertDB('yclass_code', insert_sql)
+        resp = {
+            "status": 200,
+            "msg": code
+        }
+        self.write(resp)
+
+
+class YcodeDelHandler(BaseHandler.BaseHandler):
+    """docstring for YcodeDelHandler"""
+    
+    def get(self, id):
+        drop_sql = "yc_id=%s" % id
+        self.application.dropDB('yclass_code', drop_sql)
+        self.render("status.html", info="删除成功", url="/admin/ycode.html")
+        

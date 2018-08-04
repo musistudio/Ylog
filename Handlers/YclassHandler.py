@@ -11,6 +11,26 @@ class IndexHandler(BaseHandler.BaseHandler):
 		self.render("yclass/index.html")
 
 
+
+class YclassSearch(BaseHandler.BaseHandler):
+	"""docstring for YclassSearch"""
+	
+	@tornado.web.asynchronous
+	@tornado.gen.engine
+	def post(self):
+		school   = self.get_argument('school')
+		client   = tornado.httpclient.AsyncHTTPClient()
+		body     = "search=%s" % school
+		headers  = {}
+		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/common/org/search",\
+			method="POST", headers=headers, body=body.encode("utf-8"), validate_cert=False)
+		response = yield client.fetch(request)
+		res = json.loads(response.body)
+		self.write(res)
+		self.finish()
+		
+
+
 class YclassLogin(BaseHandler.BaseHandler):
 	"""docstring for YclassLogin
 		登陆实现，将信息存入cookie
@@ -19,21 +39,61 @@ class YclassLogin(BaseHandler.BaseHandler):
 	@tornado.web.asynchronous
 	@tornado.gen.engine
 	def post(self):
-		username = self.get_argument("username")
-		password = self.get_argument("password")
-		print(username, password)
-		self.table = "yclass_allow"
-		allows = self.selectDB()
+		type = self.get_argument("type")
 		client   = tornado.httpclient.AsyncHTTPClient()
-		body     = "orgId=85&password={}&rememberMe=true&type=studentNo&username={}".format(password, username)
 		headers  = {}
+		if type == 'xh':
+			school = self.get_argument("school")
+			username = self.get_argument("snum")
+			password = self.get_argument("spwd")
+			code = self.get_argument("code")
+			body     = "orgId={}&password={}&rememberMe=true&type=studentNo&username={}".format(school, password, username)
+		else:
+			username = self.get_argument('username')
+			password = self.get_argument('password')
+			code = self.get_argument('code')
+			body = "&password={}&rememberMe=true&type=account&username={}".format(password, username)
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/system/login",\
 			method="POST", headers=headers, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
 		res = json.loads(response.body)
-		for allow in allows:
-			try:
-				if res["data"]["username"] in allow["username"]:
+		try:
+			if code is not '':
+				codes = self.application.executeDB("select * from yclass_code where code='%s' and isuse='False'" % code)
+				if codes is None:
+					resp = {
+						"status": 401,
+						"msg": "授权码错误"
+					}
+					self.write(resp)
+				else:
+					insert_sql = {
+						"ya_id": "null",
+						"ya_username": res["data"]["username"]
+					}
+					self.application.insertDB('yallow_users', insert_sql)
+					self.application.updateDB("yclass_code", "isuse='True'", "code='%s'" %code)
+					self.set_secure_cookie("token", res["data"]["token"])
+					self.set_secure_cookie("realname", urllib.parse.quote(res["data"]["realname"]))
+					rep = {
+						"status": 200,
+						"token": res["data"]["token"],
+						"realname": res["data"]["realname"]
+					}
+					self.write(rep)
+			else:
+				users = self.application.executeDB("select * from yclass_users where yu_username='%s'" %res["data"]["username"])
+				allow = self.application.executeDB("select * from yallow_users where ya_username='%s'" %res["data"]["username"])
+				if users is None:
+					insert_sql = {
+						"yu_id": "null",
+						"yu_useranme": res["data"]["username"],
+						"yu_realname": res["data"]["realname"],
+						"yu_email": res["data"]["email"],
+						"yu_phone": res["data"]["mobile"]
+					}
+					self.application.insertDB('yclass_users', insert_sql)
+				if allow is not None:
 					rep = {
 						"status": 200,
 						"token": res["data"]["token"],
@@ -43,15 +103,18 @@ class YclassLogin(BaseHandler.BaseHandler):
 					self.set_secure_cookie("realname", urllib.parse.quote(res["data"]["realname"]))
 					print(res["data"]["token"], res["data"]["realname"])
 					self.write(rep)
-
 				else:
-					self.write("该用户没有使用资格")
-			except TypeError:
-				rep = {
+					rep = {
+						"status": 500,
+						"msg": "该用户没有使用资格"
+					}
+					self.write(rep)
+		except TypeError:
+			rep = {
 					"status": 401,
 					"msg": "用户名或密码错误"
 				}
-				self.write(rep)
+			self.write(rep)
 		self.finish()
 
 

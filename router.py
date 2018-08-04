@@ -33,10 +33,15 @@ routers = [
     (r"/admin/wcategoriesadd", AdminHandler.WcategoriesAddHandler),
 
 
+    (r"/admin/ycode.html", AdminHandler.YclassHandler),
+    (r"/admin/ycode", AdminHandler.YclassCodeHandler),
+    (r"/admin/ycodedel/(\d+)", AdminHandler.YcodeDelHandler),
+
     (r"/admin/login.html", AdminHandler.LoginHandler),
     (r"/admin/login", AdminHandler.LoginPostHandler),
     (r"/admin/logout", AdminHandler.LogoutHandler),
     (r"/yclass/", YclassHandler.IndexHandler),
+    (r"/yclass/search", YclassHandler.YclassSearch),
     (r"/yclass/login", YclassHandler.YclassLogin),
     (r"/yclass/logout", YclassHandler.YclassLogout),
     (r"/yclass/classlist", YclassHandler.YclassList),

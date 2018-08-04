@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ylog管理系统</title>
+	<script src="{{static_url('js/jquery.js')}}"></script>
+	<script src="{{static_url('js/clipboard.min.js')}}"></script>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<style>
+		body{
+			background-color: #eee;
+		}
+		.container{
+			width: 100%;
+		}
+		.container .c-left{
+			float: left;
+			width: 48%;
+		}
+		.container h1{
+			display: block;
+			height: 50px;
+			line-height: 50px;
+			border-bottom: 1px solid #ddd;
+			margin-bottom: 10px;
+		}
+		.container .c-left input{
+			width: 90%;
+			border-radius: 6px;
+		    border: 1px solid #ddd;
+		    padding-left: 5px;
+		    height: 35px;
+		    font-size: 16px;
+		}
+		.container .c-left button{
+			margin-top: 20px;
+		}
+
+		.container .c-right{
+			width: 48%;
+			float: right;
+		}
+		table>tbody>tr>td, table>thead>tr>th, table>tbody>tr>th{
+	    	text-align: center;
+	    }
+	</style>
+</head>
+<body>
+	<div class="container">
+		
+		<div class="c-left">
+			<h1>生成</h1>
+			<h4>生成授权码</h4>
+			<input type="text" id="code">
+			<button class="btn" data-clipboard-target="#code" style="margin-top: 0;">
+			    <img src="http://olx7tg2rm.qnssl.com/18012720.529c81b/assets/images/clippy.svg" alt="复制到剪切板" width="10">
+			</button>
+			<button class="btn btn-primary" type="submit" id="submit">生 成</button>
+		</div>
+		<div class="c-right">
+			<h1>管理</h1>
+			<table class="table table-hover">
+			    <thead>
+			      <tr>
+			        <th>ID</th>
+			        <th>授权码</th>
+			        <th>使用情况</th>
+			        <th>操作</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+				{% for code in codes %}
+			      <tr>
+			        <th>{{code["yc_id"]}}</th>
+			        <td>{{code["code"]}}</td>
+			        <td>{{code["isuse"]}}</td>
+			        <td><a href="/admin/ycodedel/{{code['yc_id']}}">删除</a></td>
+			      </tr>
+				{% end %}
+			    </tbody>
+		    </table>
+		</div>
+
+	</div>
+
+
+
+    <script>
+    var clipboard = new ClipboardJS('.btn');
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+    </script>
+	<script>
+		
+		$("#submit").click(function () {
+
+			$.ajax({
+				url: "/admin/ycode",
+				method: "post",
+				data: {
+
+				},
+				success: function (data) {
+				    if(data.status == 200){
+				        $('#code').val(data.msg)
+					}
+                }
+			})
+        })
+	</script>
+</body>
+</html>
