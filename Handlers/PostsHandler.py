@@ -3,8 +3,8 @@ import base64
 
 class PostsHandler(BaseHandler.BaseHandler):
     def get(self, id):
-    	isLast = 'False'
-    	isFirst = 'False'
+    	isLast = 'false'
+    	isFirst = 'false'
     	first = self.application.executeDB("SELECT count(*) from artical where ar_id <= %s;" % id)[0]
     	last = self.application.executeDB("SELECT count(*) from artical where ar_id >= %s;" % id)[0]
     	if first == 0:

@@ -25,8 +25,8 @@ class YclassSearch(BaseHandler.BaseHandler):
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/common/org/search",\
 			method="POST", headers=headers, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
-		#print(response.body.decode("utf-8"))
-		res = json.loads(response.body.decode("utf-8"))
+		
+res = json.loads(response.body)
 		self.write(res)
 		self.finish()
 		
@@ -57,7 +57,7 @@ class YclassLogin(BaseHandler.BaseHandler):
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/system/login",\
 			method="POST", headers=headers, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
-		res = json.loads(response.body.decode("utf-8"))
+		res = json.loads(response.body)
 		try:
 			if code is not '':
 				codes = self.application.executeDB("select * from yclass_code where code='%s' and isuse='False'" % code)
@@ -88,14 +88,13 @@ class YclassLogin(BaseHandler.BaseHandler):
 				if users is None:
 					insert_sql = {
 						"yu_id": "null",
-						"yu_username": res["data"]["username"],
+						"yu_useranme": res["data"]["username"],
 						"yu_realname": res["data"]["realname"],
 						"yu_email": res["data"]["email"],
 						"yu_phone": res["data"]["mobile"]
 					}
 					self.application.insertDB('yclass_users', insert_sql)
 				if allow is not None:
-					print(allow)
 					rep = {
 						"status": 200,
 						"token": res["data"]["token"],
@@ -148,7 +147,7 @@ class YclassList(BaseHandler.BaseHandler):
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/system/list",\
 			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
-		dataLists = json.loads(response.body.decode("utf-8"))['data']['dataList']
+		dataLists = json.loads(response.body)['data']['dataList']
 		self.render('yclass/class.html', classes=dataLists)
 
 
@@ -164,16 +163,8 @@ class MessageHandler(WebSocketHandler):
 	"""docstring for MessageHandler
 		云端看课逻辑实现
 	"""
-	def set_default_headers(self):
-		self.set_header('Access-Control-Allow-Origin', '*')
-		self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-		self.set_header('Access-Control-Max-Age', 1000)
-		self.set_header('Access-Control-Allow-Headers', '*')
-		# self.set_header('Content-type', 'application/json')
-	def check_origin(self, origin):
-		return True
-	
 
+	
 	def open(self):
 		self.realname = str(self.get_secure_cookie("realname"), 'utf-8')
 		self.token = str(self.get_secure_cookie("token"), 'utf-8')
@@ -198,7 +189,7 @@ class MessageHandler(WebSocketHandler):
 			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
 		# print(response.body)
-		datas = json.loads(response.body.decode("utf-8"))
+		datas = json.loads(response.body)
 		for data in datas['data']:
 			for sections in data['data']:
 				for section in sections['data']:
@@ -217,7 +208,7 @@ class MessageHandler(WebSocketHandler):
 		request  = tornado.httpclient.HTTPRequest("http://student.zjedu.moocollege.com/nodeapi/3.0.1/student/course/achievement/video",\
 			method="POST", headers=header, body=body.encode("utf-8"), validate_cert=False)
 		response = yield client.fetch(request)
-		datas = json.loads(response.body.decode("utf-8"))
+		datas = json.loads(response.body)
 		videos = datas['data']
 		i = 0
 		while(i<len(videos)):

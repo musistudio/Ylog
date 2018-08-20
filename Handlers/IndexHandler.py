@@ -29,7 +29,7 @@ class IndexHandler(BaseHandler.BaseHandler):
     def getData(self):
         res = []
         keys = ['ar_id', 'ar_tittle', 'ar_date', 'ar_sketch', 'ar_thumbnail']
-        datas = self.application.executesDB("SELECT ar_id,ar_tittle,ar_date,ar_sketch,ar_thumbnail from artical limit 0,5;")
+        datas = self.application.executesDB("SELECT ar_id,ar_tittle,ar_date,ar_sketch,ar_thumbnail from artical order by ar_id desc limit 0,5;")
         for data in datas:
             result = dict()
             for key in keys:
@@ -46,11 +46,18 @@ class IndexHandler(BaseHandler.BaseHandler):
         return page
 
 
-class ListHandler(IndexHandler):
+class ListHandler(BaseHandler.BaseHandler):
     def get(self, id):
         self.table = 'artical'
         self.id = id
-        res = self.getData()
+        datas = self.getData()
+        for data in datas:
+            for res in data:
+                if res == 'ar_sketch':
+                    try:
+                        data[res] = base64.b64decode(data[res].encode("utf-8"))
+                    except Exception:
+                        print("the content is not base64")
         isLast = "false"
         page = self.getPage()
         if page < int(id):
@@ -58,12 +65,13 @@ class ListHandler(IndexHandler):
         else:
             if page == int(id):
                 isLast = "true"
-            self.render("index.html", articals=res, id=self.id, isLast=isLast)
+            self.render("index.html", articals=datas, id=self.id, isLast=isLast)
 
     def getData(self):
         res = []
         keys = ['ar_id', 'ar_tittle', 'ar_date', 'ar_sketch', 'ar_thumbnail']
-        datas = self.application.executesDB("SELECT ar_id,ar_tittle,ar_date,ar_sketch,ar_thumbnail from {} limit {},5;".format(self.table, (int(self.id)-1)*5))
+        datas = self.application.executesDB("SELECT ar_id,ar_tittle,ar_date,ar_sketch,ar_thumbnail from {} order by ar_id desc limit {},5;".format(self.table, (int(self.id)-1)*5))
+        print(datas)
         for data in datas:
             result = dict()
             for key in keys:

@@ -49,6 +49,7 @@ class Application(tornado.web.Application):
 
     def updateDB(self, table, update_sql, where):
         self.db.execute("UPDATE {} SET {} WHERE {}".format(table, update_sql, where))
+        self.db.execute("commit")
 
     def executesDB(self, execute_sql):
         self.db.execute(execute_sql)

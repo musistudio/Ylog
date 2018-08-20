@@ -13,7 +13,7 @@
     </div>
     <script src="{{static_url('js/jquery.js')}}"></script>
     <script type="text/javascript">
-        var ws = new WebSocket("ws://localhost:8000/yclass/message");
+        var ws = new WebSocket("ws://yclass.musiiot.top/yclass/message");
         ws.onmessage = function(e) {
             $("#contents").append("<li>" + e.data + "</li>");
         }

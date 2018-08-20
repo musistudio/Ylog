@@ -65,7 +65,7 @@
 
 	<script>
 	var simplemde = new SimpleMDE({ element: document.getElementById("test") });
-	simplemde.value("{{ artical['ar_source'] }}");
+	simplemde.value(`{{ artical['ar_source'] }}`);
 	$("#tittle").val("{{ artical['ar_tittle'] }}");
 	$("#sketch").val("{{ artical['ar_sketch'] }}");
 	$("#thumbnail").val("{{ artical['ar_thumbnail'] }}");

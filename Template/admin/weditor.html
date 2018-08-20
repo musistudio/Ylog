@@ -62,7 +62,7 @@
 
 	<script>
 	var simplemde = new SimpleMDE({ element: document.getElementById("test") });
-	simplemde.value("{{ wiki['nt_source'] }}");
+	simplemde.value(`{{ wiki['nt_source'] }}`);
 	$("#tittle").val("{{ wiki['nt_tittle'] }}");
 	</script>
 	<script>

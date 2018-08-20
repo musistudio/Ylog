@@ -126,8 +126,9 @@ class EditorHandler(BaseHandler.BaseHandler):
         artical = dict()
         for key in keys:
             artical[key] = result[keys.index(key)]
-        artical['ar_sketch'] = base64.b64decode(artical['ar_sketch'].encode("utf-8"))
-        artical['ar_source'] = base64.b64decode(artical['ar_source'].encode("utf-8"))
+        artical['ar_sketch'] = str(base64.b64decode(artical['ar_sketch']), 'utf-8').replace('"', "'")
+        ar_source = str(base64.b64decode(artical['ar_source']), 'utf-8').replace('"', "'")
+        artical['ar_source'] = ar_source.replace('`', '\`')
         self.render("admin/editor.html", artical=artical, tags=tags)
 
 
@@ -309,7 +310,8 @@ class WikiUpHandler(BaseHandler.BaseHandler):
         wiki = dict()
         for key in keys:
             wiki[key] = result[keys.index(key)]
-        wiki['nt_source'] = base64.b64decode(wiki['nt_source'].encode("utf-8"))
+        nt_source = str(base64.b64decode(wiki['nt_source']), "utf-8").replace('`', '\`')
+        wiki['nt_source'] = nt_source.replace('"', "'")
         self.render("admin/weditor.html", wiki=wiki, cates=cate)
 
 
